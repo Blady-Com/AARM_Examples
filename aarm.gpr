@@ -1,0 +1,27 @@
+project AARM is
+
+   for Source_Dirs use ("src");
+   for Object_Dir use "obj";
+   for Main use ("aarm_2012_ch03.adb", "aarm_2012_ch04.adb", "aarm_2012_ch05.adb", "aarm_2012_ch06.adb", "aarm_2012_ch07.adb");
+
+   package Builder is
+       for Default_Switches ("ada") use ("-g");
+   end Builder;
+
+   package Compiler is
+       for Default_Switches ("ada") use ("-gnatVa", "-gnatw.eH.YD", "-g", "-gnato", "-fstack-check", "-gnatf", "-gnatW8", "-gnateE");
+   end Compiler;
+
+   package Binder is
+       for Default_Switches ("ada") use ("-E");
+   end Binder;
+
+   package Pretty_Printer is
+       for Default_Switches ("ada") use ("-M120", "-W8");
+   end Pretty_Printer;
+
+   package Linker is
+      for Default_Switches ("ada") use ("-Wl,-no_pie");
+   end Linker;
+
+end AARM;
