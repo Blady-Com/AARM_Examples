@@ -1,14 +1,15 @@
 # Annotated Ada Reference Manual Examples
 
-The version of the [Annotated Ada Reference Manual](http://www.ada-auth.org/arm.html) (AARM) used here is the Consolidated Ada 2012 version, which includes the original third edition and the corrections from Technical Corrigendum 1.
+The version of the [Annotated Ada Reference Manual](http://www.ada-auth.org/arm.html) (AARM) used here is Ada 202x draft 22.
+This draft contains all ARG-approved AI12s that were approved through the end of June 2019, as well as AI12-0280-2 and AI12-0341-1.
 
 As an exercise, examples of AARM have been gathered is compilable source files.
 
-Pascal Pignard, January 2018.
+Pascal Pignard, November 2019.
 
-### AARM Technical Corrigendum 1 for Ada 2012 version legal information:
+### AARM Ada 202x version legal information:
 
-Copyright © 2013, 2014, 2015, 2016 AXE Consultants. All Rights Reserved.
+Copyright © 2016, 2017, 2018, 2019 AXE Consultants. All Rights Reserved.
 
 This document may be copied, in whole or in part, in any form or by any means,
 as is, or with alterations, provided that (1) alterations are clearly marked
