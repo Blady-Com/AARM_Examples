@@ -75,6 +75,7 @@ procedure AARM_202x_CH11 is
    exception
       when others =>
          raise;                                -- re-raise the current exception
+         -- For an example of a raise expression, see the Streams Subsystem definitions in 13.13.1.
    end Section_11_3_Paragraph_5;
 
    --  11.4 Exception Handling

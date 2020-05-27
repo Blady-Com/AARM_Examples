@@ -11,8 +11,11 @@ procedure AARM_202x_CHAJ is
 
    task Interrupt_Handler is
       entry Done;
-      --@@ MODIF16 PP: error: "Device_Done" not declared in "Names"
       --            for Done'Address use Ada.Interrupts.Reference(Ada.Interrupts.Names.Device_Done);
+      --@@ Note (PP): implementation defined, GNAT: "Device_Done" not declared in "Names"
+      --        for Done'Address use Ada.Interrupts.Reference(Ada.Interrupts.Names.SIGINT);
+      --@@ MODIF18 PP error: invalid address clause for initialized object "Done"
+      --@@ MODIF18 PP error: function "Reference" is not pure (RM 13.1(22))
    end Interrupt_Handler;
 
    task body Interrupt_Handler is

@@ -152,12 +152,18 @@ procedure AARM_202x_CH13 is
       end loop;
    end Section_13_4_Paragraph_11b;
 
---  Example of an enumeration representation clause:
+   -- {AI12-0312-1} Examples of enumeration representation clauses:
 
    type Mix_Code is (ADD, SUB, MUL, LDA, STA, STZ);
    for Mix_Code use (ADD => 1, SUB => 2, MUL => 3, LDA => 8, STA => 24, STZ => 33);
 
---  13.5 Record Layout
+   -- See 3.5.2.
+   type Roman_Digit is ('I', 'V', 'X', 'L', 'C', 'D', 'M');
+   for Roman_Digit use ('I' => 1, 'V' => 5, 'X' => 10, 'L' => 50, 'C' => 100, 'D' => 500, 'M' => 1000);
+
+   -- For an example of the use of attribute Enum_Rep, see 4.2.1.
+
+   --  13.5 Record Layout
 
    --  13.5.1 Record Representation Clauses
 
@@ -520,9 +526,12 @@ procedure AARM_202x_CH13 is
       function F return T;
       function G (X : T) return Boolean;
       Y : Boolean := G (F); -- doesn't force T in Ada 83
---     for T use record --@@ MODIF10 PP error: representation item appears too late
---        NTCF at 0 range 0 .. 31; --@ ...
---     end record;
+
+      --     for T use record
+      --        NTCF at 0 range 0 .. 31; --@ ...
+      --     end record;
+      --@@ Note (PP): not illegal but will issue Program_Error,
+      --              GNAT issues error: representation item appears too late
 
    end Section_13_14_Paragraph_1q;
 
@@ -538,7 +547,9 @@ procedure AARM_202x_CH13 is
          type T is private;
          function F return T;
          function G (X : T) return Boolean;
---        Y : Boolean := G (F); -- doesn't force T in Ada 83 --@@ MODIF11 PP error: type "T" must be fully defined before this point
+         --        Y : Boolean := G (F); -- doesn't force T in Ada 83
+         --@@ Note (PP): not illegal but will issue Program_Error,
+         --              GNAT issues error: type "T" must be fully defined before this point
       private
          type T is record
             NTCF : NTCT; --@ ...
@@ -569,7 +580,7 @@ procedure AARM_202x_CH13 is
                end case;
             end record;
          end P2;
---        X : Boolean := P2."=" ((False, 1), (False, 1)); --@@ MODIF12 PP error: "=" not declared in "P2"
+         --        X : Boolean := P2."=" ((False, 1), (False, 1)); --@@ MODIF12 PP error: "=" not declared in "P2"
       private
          type T is array (1 .. Func_Call) of Integer;
       end P1;
@@ -604,7 +615,8 @@ procedure AARM_202x_CH13 is
          type A2 is new A1;
          type A3 is new A2;
          X : A3 := new Boolean; -- Don't know what pool yet!
---        for A1'Storage_Pool use F.all; --@@ MODIF13 PP error: representation item appears too late
+
+         --        for A1'Storage_Pool use F.all; --@@ Note (PP): illegal, GNAT error: representation item appears too late
       end P;
 
    end Section_13_14_Paragraph_13c;

@@ -5,6 +5,9 @@ procedure AARM_202x_CH07 is
    package Needed_To_Compile is
       -- Needed to compile, sometimes dummy
       type NTCT is range 0 .. 20;
+      type Level is (Low, Medium, Urgent);
+      type Day is (Mon, Tue, Wed, Thu, Fri, Sat, Sun);
+      subtype Weekday is Day range Mon .. Fri;
    end Needed_To_Compile;
    use Needed_To_Compile;
 
@@ -183,7 +186,7 @@ procedure AARM_202x_CH07 is
          procedure Bar (X : T1'Class) is
          begin
             -- Pkg.Foo (X); -- should call Foo #1 or an override thereof
-            Pkg.Foo (Pkg.Ifc'Class(X)); --@@ MODIF14 PP error: expected type "Ifc"
+            Pkg.Foo (Pkg.Ifc'Class (X));
          end Bar;
 
       begin
@@ -381,6 +384,58 @@ procedure AARM_202x_CH07 is
    end Section_7_3_1_Paragraph_14;
 
    --  7.3.2 Type Invariants
+
+--                                       Examples
+
+-- {AI12-0312-1} A work scheduler where only urgent work can be scheduled for weekends:
+
+   package Work_Orders is
+
+      -- See 3.5.1 for type declarations of Level, Day, and Weekday
+
+      type Work_Order is private with
+         Type_Invariant => Day_Scheduled (Work_Order) in Weekday or else Priority (Work_Order) = Urgent;
+
+      function Schedule_Work (Urgency : in Level; To_Occur : in Day) return Work_Order with
+         Pre => Urgency = Urgent or else To_Occur in Weekday;
+
+      function Day_Scheduled (Order : in Work_Order) return Day;
+
+      function Priority (Order : in Work_Order) return Level;
+
+      procedure Change_Priority (Order : in out Work_Order; New_Priority : in Level; Changed : out Boolean) with
+         Post => Changed = (Day_Scheduled (Order) in Weekday or else Priority (Order) = Urgent);
+
+   private
+
+      type Work_Order is record
+         Scheduled : Day;
+         Urgency   : Level;
+      end record;
+
+   end Work_Orders;
+
+   package body Work_Orders is
+
+      function Schedule_Work (Urgency : in Level; To_Occur : in Day) return Work_Order is
+        (Scheduled => To_Occur, Urgency => Urgency);
+
+      function Day_Scheduled (Order : in Work_Order) return Day is (Order.Scheduled);
+
+      function Priority (Order : in Work_Order) return Level is (Order.Urgency);
+
+      procedure Change_Priority (Order : in out Work_Order; New_Priority : in Level; Changed : out Boolean) is
+      begin
+         -- Ensure type invariant is not violated
+         if Order.Urgency = Urgent or else (Order.Scheduled in Weekday) then
+            Changed       := True;
+            Order.Urgency := New_Priority;
+         else
+            Changed := False;
+         end if;
+      end Change_Priority;
+
+   end Work_Orders;
 
    --  7.3.3 Default Initial Conditions
 

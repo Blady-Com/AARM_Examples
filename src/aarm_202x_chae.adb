@@ -47,12 +47,8 @@ procedure AARM_202x_CHAE is
 --         with Tapes, Name_Server;
    package body Tape_Driver is
       type New_Tape is new Tapes.Tape with null record; --@ ...
-
-   --@@ MODIF15 PP: Copy and Rewind specifications added
-      procedure Copy (From, To : access New_Tape; Num_Recs : in Natural);
-      procedure Rewind (T : access New_Tape);
-
-      procedure Copy (From, To : access New_Tape; Num_Recs : in Natural) is
+      overriding procedure Rewind (T : access New_Tape);
+      overriding procedure Copy (From, To : access New_Tape; Num_Recs : in Natural) is
       begin
          null; --@ . . .
       end Copy;

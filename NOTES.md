@@ -13,18 +13,27 @@
 ## Reports
 
 - MODIF01: child package not allowed in procedure
-- MODIF02: sent to ACAA (20191006)
+- *MODIF02: sent to ACAA (20191006) -> modified in draft 24*
 - MODIF03: sent to AdaCore (20190929)
-- MODIF04: sent to ACAA (20191010)
-- MODIF05: sent to ACAA (20191010)
+- *MODIF04: sent to ACAA (20191010) -> modified in draft 24*
+- *MODIF05: sent to ACAA (20191010) -> modified in draft 24*
 - MODIF06: sent to AdaCore (20191011)
 - MODIF07: component overlaps tag field of tagged type
 - MODIF08: sent to AdaCore (20191013)
 - MODIF09: not defined by GNAT
-- MODIF10: representation item appears too late
-- MODIF11: type must be fully defined before this point
+- *MODIF10: representation item appears too late -> ok*
+- *MODIF11: type must be fully defined before this point -> ok*
 - MODIF12: sent to AdaCore (20191013)
-- MODIF13: representation item appears too late
-- MODIF14: sent to ACAA (20191015)
-- MODIF15: sent to ACAA (201911xx)
-- MODIF16: error: "Device_Done" not declared in "Names"
+- *MODIF13: representation item appears too late -> ok*
+- *MODIF14: sent to ACAA (20191015) -> modified in draft 24*
+- *MODIF15: sent to ACAA (20191124) -> modified in draft 24*
+- *MODIF16: error: "Device_Done" not declared in "Names", Ada.Interrupts.Names is implementation defined -> ok*
+- MODIF17-CH12: sent to ACAA (not yet)
+- MODIF18-CHAJ: sent to ACAA (not yet)
+- MODIF: general comment for a feature not yet available with GNAT Community 2020
+- MODIF19-CH05: sent to AdaCore (not yet)
+- MODIF20-CH04: sent to ACAA (not yet)
+- MODIF21-CH04: sent to AdaCore (not yet)
+- MODIF22-CH04: sent to AdaCore (not yet)
+- MODIF23-CH05: sent to ACAA (not yet)
+- MODIF24-CH05: sent to AdaCore (not yet)

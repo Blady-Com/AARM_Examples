@@ -1,55 +1,78 @@
 with Ada.Text_IO;
+with Ada.Containers.Ordered_Maps;
+with Ada.Environment_Variables;
+with Ada.Tags;
 
-procedure AARM_2012_CH05 is
+procedure AARM_202x_CH05 is
 
    package Needed_To_Compile is
       -- Needed to compile, sometimes dummy
+      type NTCT is range 0 .. 20;
       type Real is digits 8;
       type Matrix is array (Integer range <>, Integer range <>) of Real;
       type Vector is array (Integer range <>) of Real;
       subtype Month_Name is String (1 .. 3);
-      type Gender is (M, F);
       type Date is record
          Day   : Integer range 1 .. 31;
          Month : Month_Name;
          Year  : Integer range 0 .. 4000;
       end record;
-      type Person (<>);    -- incomplete type declaration
-      type Car is tagged; -- incomplete type declaration
-
-      type Person_Name is access Person;
-      type Car_Name is access all Car'Class;
-
-      type Car is tagged record
-         Number : Integer;
-         Owner  : Person_Name;
-      end record;
-
-      type Person (Sex : Gender) is record
-         Name    : String (1 .. 20);
-         Birth   : Date;
-         Age     : Integer range 0 .. 130;
-         Vehicle : Car_Name;
-         case Sex is
-            when M =>
-               Wife : Person_Name (Sex => F);
-            when F =>
-               Husband : Person_Name (Sex => M);
-         end case;
-      end record;
-
+      package Persons_And_Car is
+         type Gender is (M, F);
+         type Person (<>);    -- incomplete type declaration
+         type Car is tagged; -- incomplete type declaration
+         type Person_Name is access Person;
+         type Car_Name is access all Car'Class;
+         type Car is tagged record
+            Number : Integer;
+            Owner  : Person_Name;
+         end record;
+         type Person (Sex : Gender) is record
+            Name    : String (1 .. 20);
+            Birth   : Date;
+            Age     : Integer range 0 .. 130;
+            Vehicle : Car_Name;
+            case Sex is
+               when M =>
+                  Wife : Person_Name (Sex => F);
+               when F =>
+                  Husband : Person_Name (Sex => M);
+            end case;
+         end record;
+      end Persons_And_Car;
       type Bit_Vector is array (Integer range <>) of Boolean;
       type Table is array (1 .. 10) of Integer;
       N  : constant := 199;
       M  : constant := 99;
       PI : constant := 3.14;
       type Day is (Mon, Tue, Wed, Thu, Fri, Sat, Sun);
-
+      type Cell;  --  incomplete type declaration
+      type Link is access Cell;
+      type Cell is record
+         Value : Integer;
+         Succ  : Link;
+         Pred  : Link;
+      end record;
+      Head      : Link     := new Cell'(0, null, null);
+      Next      : Link     := Head.Succ;
       Max_Value : constant := 99;
+      Max       : constant := 500;                   -- an integer number
+      type Complex is record
+         Re : Real := 0.0;
+         Im : Real := 0.0;
+      end record;
+      Board : Matrix (1 .. 8, 1 .. 8);  --  see 3.6
+      Count : Integer;
+      Grid  : array (1 .. 80, 1 .. 100) of Boolean;
       type Color is (White, Red, Yellow, Green, Blue, Brown, Black);
       type Frame is access Matrix;
       function Next_Frame (K : Positive) return Frame is (null);          --  see 3.10
       function Dot_Product (Left, Right : Vector) return Real is (0.0);  --  see 3.6
+      type Expression is tagged null record;
+      type Expr_Ptr is access all Expression'Class;
+      type Binary_Operation is new Expression with record
+         Left, Right : Expr_Ptr;
+      end record;
       type Device is (Printer, Disk, Drum);
       type State is (Open, Closed);
       Page_Size : constant := 100;
@@ -103,12 +126,15 @@ procedure AARM_2012_CH05 is
 
       --  Examples of labeled statements:
 
-      <<Here>> <<Ici>> <<Aqui>> <<Hier>>
+      <<Here>>
+      <<Ici>>
+      <<Aqui>>
+      <<Hier>>
       null;
       <<After>>
       X := 1;
 
-   end;
+   end Section_5_1_Paragraph_19a;
 
    --  5.2 Assignment Statements
 
@@ -133,16 +159,15 @@ procedure AARM_2012_CH05 is
       X : R1;
    begin
       F.all := X;  -- Right hand side helps resolve left hand side
-   end;
+   end Section_5_2_Paragraph_4a;
 
    procedure Section_5_2_Paragraph_18 is
       use Needed_To_Compile;
-      Value    : Integer;
-      Shade    : Color;
-      F        : constant         := 2;
-      U        : Real;
-      V, W     : Vector (1 .. 10) := (others => 1.1);
-      Next_Car : Car_Name         := new Car;
+      Value : Integer;
+      Shade : Color;
+      F     : constant         := 2;
+      U     : Real;
+      V, W  : Vector (1 .. 10) := (others => 1.1);
    begin
 
       --  Examples of assignment statements:
@@ -153,10 +178,10 @@ procedure AARM_2012_CH05 is
       Next_Frame (F) (M, N) := 2.5;        --  see 4.1.1
       U                     := Dot_Product (V, W);            --  see 6.3
 
-      Writer := (Status => Open, Unit => Printer, Line_Count => 60);  -- see 3.8.1
+      Writer   := (Status => Open, Unit => Printer, Line_Count => 60);  -- see 3.8.1
       Next.all := (72074, null, Head);    --  see 3.10.1
 
-   end;
+   end Section_5_2_Paragraph_18;
 
    procedure Section_5_2_Paragraph_22 is
 
@@ -168,7 +193,7 @@ procedure AARM_2012_CH05 is
       I := J;  --  identical ranges
       K := J;  --  compatible ranges
       J := K;  --  will raise Constraint_Error if K > 10
-   end;
+   end Section_5_2_Paragraph_22;
 
    procedure Section_5_2_Paragraph_25 is
 
@@ -178,10 +203,10 @@ procedure AARM_2012_CH05 is
       B : String (3 .. 33);
 
    begin
-      A := B;  --  same number of components
+      A           := B;  --  same number of components
       A (1 .. 9)  := "tar sauce";
       A (4 .. 12) := A (1 .. 9);  --  A(1 .. 12) = "tartar sauce"
-   end;
+   end Section_5_2_Paragraph_25;
 
    procedure Section_5_2_Paragraph_28e is
       type NonLim is new Integer;
@@ -205,30 +230,31 @@ procedure AARM_2012_CH05 is
    begin
       --@ Foo(2).all := Foo(1).all; -- illegal since Ada 2005
       null;
-   end;
+   end Section_5_2_Paragraph_28e;
 
    --  5.2.1 Target Name Symbols
 
    procedure Section_5_2_Paragraph_1 is
+      use Needed_To_Compile;
+
       My_Complex_Array : array (1 .. Max) of Complex; -- See 3.3.2, 3.8.
    begin
 
       -- Square the element in the Count (see 3.3.1) position:
 
-      My_Complex_Array (Count) := (Re => @.Re**2 - @.Im**2,
-                                   Im => 2.0 * @.Re * @.Im);
+      My_Complex_Array (Count) := (Re => @.Re**2 - @.Im**2, Im => 2.0 * @.Re * @.Im);
 
       -- A target_name can be used multiple times and as a prefix if needed.
 
-      Board(1, 1) := @ + 1;  -- An abbreviation for Board(1, 1) := Board(1, 1) + 1;
+      Board (1, 1) := @ + 1.0;  -- An abbreviation for Board(1, 1) := Board(1, 1) + 1.0; --@@ MODIF23 PP: missing ".0"
       -- (Board is declared in 3.6.1).
 
-   end;
+   end Section_5_2_Paragraph_1;
 
    --  5.3 If Statements
 
    procedure Section_5_3_Paragraph_7 is
-      use Needed_To_Compile, Ada.Text_IO;
+      use Needed_To_Compile.Persons_And_Car, Ada.Text_IO;
       type Months is (January, November, December); -- to be completed ;-)
       Month                     : Months   := November;
       Day                       : Positive := 11;
@@ -257,7 +283,7 @@ procedure AARM_2012_CH05 is
       if My_Car.Owner.Vehicle /= My_Car then            --  see 3.10.1
          Report ("Incorrect data");
       end if;
-   end;
+   end Section_5_3_Paragraph_7;
 
    --  5.4 Case Statements
 
@@ -325,12 +351,12 @@ procedure AARM_2012_CH05 is
                -- No others needed.
          end case;
       end;
-   end;
+   end Section_5_4_Paragraph_16_18c;
 
    --  5.5 Loop Statements
 
    procedure Section_5_5_Paragraph_15 is
-      use Ada.Text_IO;
+      use Ada.Text_IO, Needed_To_Compile;
       Current_Character : Character;
       type Cell;  --  incomplete type declaration
       type Link is access Cell;
@@ -384,62 +410,96 @@ procedure AARM_2012_CH05 is
       -- Example of a parallel loop:
 
       -- see 3.6
-      parallel
-      for I in Grid'Range(1) loop
-         Grid(I, 1) := (for all J in Grid'Range(2) => Grid(I,J) = True);
+      --        parallel  --@@ MODIF PP: not yet available
+      for I in Grid'Range (1) loop
+         Grid (I, 1) := (for all J in Grid'Range (2) => Grid (I, J) = True);
       end loop;
 
-   end;
+      -- {AI12-0312-1} Example of a parallel loop with a chunk specification:
 
-   --  5.5.1 User-Defined Iterator Types
+      declare
+         subtype Chunk_Number is Natural range 1 .. 8;
+         Chunk : Chunk_Number; --@@ MODIF PP: to be canceled when parallel will be available
 
-   --  5.5.2 Generalized Loop Iteration
+         Partial_Sum, Partial_Max : array (Chunk_Number) of Natural := (others => 0);
+         Partial_Min              : array (Chunk_Number) of Natural := (others => Natural'Last);
+
+      begin
+         --           parallel (Chunk in Chunk_Number)  --@@ MODIF PP: not yet available
+         for I in Grid'Range (1) loop
+            declare
+               True_Count : constant Natural :=
+                 [for J in Grid'Range(2) => (if Grid (I, J) then 1 else 0)]'Reduce("+",0);
+            begin
+               Partial_Sum (Chunk) := @ + True_Count;
+               Partial_Min (Chunk) := Natural'Min (@, True_Count);
+               Partial_Max (Chunk) := Natural'Max (@, True_Count);
+            end;
+         end loop;
+
+         Put_Line ("Total=" & Natural'Image (Partial_Sum'Reduce ("+", 0))); -- &  --@@ MODIF19 PP: GNAT error
+            --                      ", Min=" & Partial_Min'Reduce(Natural'Min, Natural'Last)'Image &  --@@ MODIF19 GNAT error: missing arguments for "Min" attribute (2 required)
+            --                      ", Max=" & Partial_Max'Reduce(Natural'Max, 0)'Image);   --@@ MODIF19 GNAT error: missing arguments for "Max" attribute (2 required)
+      end;
+
+         -- {AI12-0312-1} For an example of an iterator_filter, see 4.5.8.
+
+   end Section_5_5_Paragraph_15;
+
+      --  5.5.1 User-Defined Iterator Types
+
+      --  5.5.2 Generalized Loop Iteration
 
    procedure Section_5_5_2_Paragraph_15 is
       use Needed_To_Compile;
       Board : Matrix (1 .. 8, 1 .. 8);  --  see 3.6
    begin
 
-      -- Array component iterator example:
+         -- Array component iterator example:
 
-      parallel
+         --        parallel --@@ MODIF PP: not yet available
       for Element of Board loop  -- See 3.6.1.
          Element := Element * 2.0; -- Double each element of Board, a two-dimensional array.
       end loop;
-   end;
+   end Section_5_5_2_Paragraph_15;
 
-   --  5.5.3 Procedural Iterators
+      --  5.5.3 Procedural Iterators
 
    procedure Section_5_5_3_Paragraph_22 is
+      use Needed_To_Compile, Ada.Text_IO;
+      type My_Key_Type is new NTCT;
+      type My_Element_Type is new NTCT;
+      package My_Maps is new Ada.Containers.Ordered_Maps (My_Key_Type, My_Element_Type);
+      use My_Maps;
+      My_Map : Map;
    begin
 
-      -- Example of iterating over a map from My_Key_Type to My_Element_Type (see A.18.4):
+         -- Example of iterating over a map from My_Key_Type to My_Element_Type (see A.18.4):
 
-      for (C : Cursor) of My_Map.Iterate loop
-         Put_Line (My_Key_Type'Image (Key (C)) & " => " &
-                     My_Element_Type'Image (Element (C)));
-      end loop;
+         --        for (C : Cursor) of My_Map.Iterate loop   --@@ MODIF PP: not yet available
+         --           Put_Line (My_Key_Type'Image (Key (C)) & " => " &
+         --                       My_Element_Type'Image (Element (C)));
+         --        end loop;
 
-      -- The above is equivalent to:
+         -- The above is equivalent to:
 
       declare
          procedure P (C : Cursor) is
          begin
-            Put_Line (My_Key_Type'Image (Key (c)) & " => " &
-                        My_Element_Type'Image (Element (C)));
+            Put_Line (My_Key_Type'Image (Key (C)) & " => " & My_Element_Type'Image (Element (C)));
          end P;
       begin
-         My_Map.Iterator (P'Access);
+         My_Map.Iterate (P'Access); --@@ MODIF23 PP: change Iterator into Iterate
       end;
 
-      -- Example of iterating over the environment variables (see A.17):
+         -- Example of iterating over the environment variables (see A.17):
 
-      for (Name, Val) of Ada.Environment_Variables.Iterate(<>) loop
-         --  "(<>)" is optional because it is the last parameter
-         Put_Line (Name & " => " & Val);
-      end loop;
+         --        for (Name, Val) of Ada.Environment_Variables.Iterate(<>) loop  --@@ MODIF PP: not yet available
+         --           --  "(<>)" is optional because it is the last parameter
+         --           Put_Line (Name & " => " & Val);
+         --        end loop;
 
-      -- The above is equivalent to:
+         -- The above is equivalent to:
 
       declare
          procedure P (Name : String; Val : String) is
@@ -449,110 +509,113 @@ procedure AARM_2012_CH05 is
       begin
          Ada.Environment_Variables.Iterate (P'Access);
       end;
-   end;
+   end Section_5_5_3_Paragraph_22;
 
-   --  5.6 Block Statements
+      --  5.6 Block Statements
 
    procedure Section_5_6_Paragraph_7 is
       V, U : Integer;
    begin
-      Swap : declare
+      Swap :
+      declare
          Temp : Integer;
       begin
          Temp := V;
          V    := U;
          U    := Temp;
       end Swap;
-   end;
+   end Section_5_6_Paragraph_7;
 
-   --  5.6.1 Parallel Block Statements
+      --  5.6.1 Parallel Block Statements
 
    procedure Section_5_6_1_Paragraph_4 is
+      use Needed_To_Compile;
       procedure Traverse (T : Expr_Ptr) is -- see 3.9
       begin
-         if T /= null and then
-           T.all in Binary_Operation'Class -- see 3.9.1
+         if T /= null and then T.all in Binary_Operation'Class -- see 3.9.1
          then -- recurse down the binary tree
-            parallel do
-               Traverse (T.Left);
-                 and
-                   Traverse (T.Right);
-                 and
-                   Ada.Text_IO.Put_Line
-                     ("Processing " & Ada.Tags.Expanded_Name (T'Tag));
-            end do;
-            end if;
-         end Traverse;
+               --              parallel do   --@@ MODIF PP: not yet available
+               --                 Traverse (T.Left);
+               --                   and
+               --                     Traverse (T.Right);
+               --                   and
+            Ada.Text_IO.Put_Line ("Processing " & Ada.Tags.Expanded_Name (T'Tag));
+               --              end do;
+         end if;
+      end Traverse;
 
-         function Search (S : String; Char : Character) return Boolean is
-         begin
-            if S'Length <= 1000 then
-               -- Sequential scan
-               return (for some C of S => C = Char);
-            else
-               -- Parallel divide and conquer
-               declare
-                  Mid : constant Positive := S'First + S'Length/2 - 1;
-               begin
-                  parallel do
-                     for C of S(S'First .. Mid) loop
-                        if C = Char then
-                           return True;  -- Terminates enclosing do
-                        end if;
-                     end loop;
-                       and
-                     for C of S(Mid + 1 .. S'Last) loop
-                        if C = Char then
-                           return True;  -- Terminates enclosing do
-                        end if;
-                     end loop;
-                  end do;
-                     -- Not found
-                     return False;
-                  end;
-               end if;
-            end Search;
-         end;
-
-         --  5.7 Exit Statements
-
-         procedure Section_5_7_Paragraph_8 is
-            Max_Num_Items, Terminal_Item : constant := 99;
-            procedure Get_New_Item (V : out Integer) is null;
-            procedure Merge_Item (V, S : Integer) is null;
-            New_Item, Storage_File : Integer;
-            Found                  : Boolean;
-         begin
-            for N in 1 .. Max_Num_Items loop
-               Get_New_Item (New_Item);
-               Merge_Item (New_Item, Storage_File);
-               exit when New_Item = Terminal_Item;
-            end loop;
-
-            Main_Cycle :
-            loop
-               --  initial statements
-               exit Main_Cycle when Found;
-               --  final statements
-            end loop Main_Cycle;
-         end;
-
-         --  5.8 Goto Statements
-
-         procedure Section_5_8_Paragraph_8 is
-            A : constant String := "whatelse";
-            N : Positive;
-            procedure Exchange (L, R : Character) is null;
-         begin
-            <<Sort>>
-            for I in 1 .. N - 1 loop
-               if A (I) > A (I + 1) then
-                  Exchange (A (I), A (I + 1));
-                  goto Sort;
-               end if;
-            end loop;
-         end;
-
+      function Search (S : String; Char : Character) return Boolean is
       begin
-         null;
-      end AARM_2012_CH05;
+         if S'Length <= 1000 then
+               -- Sequential scan
+            return (for some C of S => C = Char);
+         else
+               -- Parallel divide and conquer
+            declare
+               Mid : constant Positive := S'First + S'Length / 2 - 1;
+            begin
+                  --                    parallel do   --@@ MODIF PP: not yet available
+               for C of S (S'First .. Mid) loop
+                  if C = Char then
+                     return True;  -- Terminates enclosing do
+                  end if;
+               end loop;
+                  --                         and
+               for C of S (Mid + 1 .. S'Last) loop
+                  if C = Char then
+                     return True;  -- Terminates enclosing do
+                  end if;
+               end loop;
+                  --                    end do;
+                  -- Not found
+               return False;
+            end;
+         end if;
+      end Search;
+
+   begin
+      null;
+   end Section_5_6_1_Paragraph_4;
+
+      --  5.7 Exit Statements
+
+   procedure Section_5_7_Paragraph_8 is
+      Max_Num_Items, Terminal_Item : constant := 99;
+      procedure Get_New_Item (V : out Integer) is null;
+      procedure Merge_Item (V, S : Integer) is null;
+      New_Item, Storage_File : Integer;
+      Found                  : Boolean;
+   begin
+      for N in 1 .. Max_Num_Items loop
+         Get_New_Item (New_Item);
+         Merge_Item (New_Item, Storage_File);
+         exit when New_Item = Terminal_Item;
+      end loop;
+
+      Main_Cycle :
+      loop
+            --  initial statements
+         exit Main_Cycle when Found;
+            --  final statements
+      end loop Main_Cycle;
+   end Section_5_7_Paragraph_8;
+
+      --  5.8 Goto Statements
+
+   procedure Section_5_8_Paragraph_8 is
+      A : constant String := "whatelse";
+      N : Positive;
+      procedure Exchange (L, R : Character) is null;
+   begin
+      <<Sort>>
+      for I in 1 .. N - 1 loop
+         if A (I) > A (I + 1) then
+            Exchange (A (I), A (I + 1));
+            goto Sort;
+         end if;
+      end loop;
+   end Section_5_8_Paragraph_8;
+
+begin
+   null;
+end AARM_202x_CH05;

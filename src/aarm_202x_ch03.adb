@@ -477,7 +477,7 @@ procedure AARM_202x_CH03 is
       type Complex is record
          Re : Real := 0.0;
          Im : Real := 0.0;
-      end record;
+      end record; -- Complex; --@@ MODIF PP: not yet available
 
       --  Examples of record variables:
 
@@ -854,7 +854,8 @@ procedure AARM_202x_CH03 is
       begin
          return 0;
       end Max_Count;
-      George : Person_Name := new Person (M);
+
+      Casey : Person_Name := new Person (M);
 
       --    ...
 
@@ -866,11 +867,11 @@ procedure AARM_202x_CH03 is
 
       Cashier, Counter : Fast_Food_Queue;
 
-      --    ...
    begin
-      -- Add George (see 3.10.1) to the cashier's queue:
-      Append (Cashier, George);
-      -- After payment, move George to the sandwich counter queue:
+      --    {AI12-0312-1} ...
+      -- Add Casey (see 3.10.1) to the cashier's queue:
+      Append (Cashier, Casey);
+      -- After payment, move Casey to the sandwich counter queue:
       Transfer (Cashier, Counter);
       --     ...
    end Section_3_9_4_Paragraph_28;
@@ -1013,22 +1014,21 @@ procedure AARM_202x_CH03 is
          Vehicle : Car_Name;
          case Sex is
             when M =>
-               Wife : Person_Name
-                 (Sex => F);  --##  warning: constraint is ignored on component that is access to current record
+               Wife : Person_Name (Sex => F);
             when F =>
-               Husband : Person_Name
-                 (Sex => M);  --## warning: constraint is ignored on component that is access to current record
+               Husband : Person_Name (Sex => M);
          end case;
       end record;
+      --   {AI12-0312-1}
       My_Car, Your_Car, Next_Car : Car_Name    := new Car;  -- see 4.8
-      George                     : Person_Name := new Person (M);
-      --           ...
+      Casey                      : Person_Name := new Person (M);
+      --             ...
    end Section_3_10_1_Paragraph_14;
 
    procedure Section_3_10_1_Paragraph_23 is
       use Section_3_10_1_Paragraph_14;
    begin
-      George.Vehicle := Your_Car;
+      Casey.Vehicle := Your_Car;
    end Section_3_10_1_Paragraph_23;
 
    package Section_3_10_1_Paragraph_23d is
@@ -1184,15 +1184,16 @@ procedure AARM_202x_CH03 is
       use Section_3_10_1_Paragraph_14, Section_3_5_1_Paragraph_14;
       --  Example of use of the Access attribute:
 
-      Martha : Person_Name := new Person (F);       -- see 3.10.1
-      Cars   : array (1 .. 2) of aliased Car;
-      -- ...
+      --    {AI12-0312-1}
+      Becky : Person_Name := new Person (F);       -- see 3.10.1
+      Cars  : array (1 .. 2) of aliased Car;
+      --             ...
    end Section_3_10_2_Paragraph_40;
 
    package body Section_3_10_2_Paragraph_40 is
    begin
-      Martha.Vehicle := Cars (1)'Access;
-      George.Vehicle := Cars (2)'Access;
+      Becky.Vehicle := Cars (1)'Access;
+      Casey.Vehicle := Cars (2)'Access;
    end Section_3_10_2_Paragraph_40;
 
    package Section_3_10_2_Paragraph_41c is
@@ -1241,6 +1242,22 @@ procedure AARM_202x_CH03 is
          return Val.all;
       end Zap;
    end Section_3_10_2_Paragraph_41i;
+
+   procedure Section_3_10_2_Paragraph_41cc is
+      type Rec is record
+         Comp : aliased Integer;
+         --                      ...
+      end record;
+
+      function F1 (A : aliased in out Rec) return access Integer is
+         function F2 (B : access Integer) return access Integer is (B); -- (1)
+      begin
+         --           return F2 (A.Comp'Access); -- (2) --## error: cannot convert local pointer to non-local access type
+         return null;
+      end F1;
+   begin
+      null;
+   end Section_3_10_2_Paragraph_41cc;
 
    --  3.11 Declarative Parts
 

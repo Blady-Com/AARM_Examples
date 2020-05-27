@@ -4,21 +4,22 @@ project AARM is
    for Object_Dir use "obj";
 
    package Builder is
-       for Default_Switches ("ada") use ("-g", "-k");
+      for Default_Switches ("ada") use ("-g", "-k");
    end Builder;
 
    package Compiler is
-       for Default_Switches ("ada") use ("-gnatVaep", "-gnatw.eH.YD", "-g", "-gnato", "-gnata", "-fstack-check",
-                                         "-gnatf", "-gnatU", "-gnatW8", "-gnateA", "-gnateE", "-gnateF", "-gnateV",
-                                         "-Wall", "-gnatX");
+      for Default_Switches ("ada") use ("-gnatVaep", "-gnatw.eH.YD", "-g", "-gnato", "-gnata", "-fstack-check",
+                                        "-gnatf", "-gnatU", "-gnatW8", "-gnateE", "-gnateF", "-gnateV",
+                                        "-Wall", "-gnatX");
    end Compiler;
 
    package Binder is
-       for Default_Switches ("ada") use ("-E");
+      for Default_Switches ("ada") use ("-E");
    end Binder;
 
    package Pretty_Printer is
-       for Default_Switches ("ada") use ("-M120", "-W8");
+      for Default_Switches ("ada") use ("-M120", "-W8", "--comments-unchanged",
+                                        "--based-grouping=0", "--decimal-grouping=0");
    end Pretty_Printer;
 
    package Linker is

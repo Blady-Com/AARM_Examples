@@ -1,11 +1,11 @@
 # Annotated Ada Reference Manual Examples
 
-The version of the [Annotated Ada Reference Manual](http://www.ada-auth.org/arm.html) (AARM) used here is Ada 202x draft 22.
-This draft contains all ARG-approved AI12s that were approved through the end of June 2019, as well as AI12-0280-2 and AI12-0341-1.
+The version of the [Annotated Ada Reference Manual](http://www.ada-auth.org/arm.html) (AARM) used here is Ada 202x draft 24.
+This draft contains all ARG-approved AI12s that were approved through the end of January 2020, excepting AI12-0302-1.
+As an exercise, examples of AARM have been gathered in compilable source files.
+Compiler used: GNAT Community 2020.
 
-As an exercise, examples of AARM have been gathered is compilable source files.
-
-Pascal Pignard, November 2019.
+Pascal Pignard, Mai 2020.
 
 ### AARM Ada 202x version legal information:
 

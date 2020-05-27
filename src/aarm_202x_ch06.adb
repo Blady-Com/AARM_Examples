@@ -191,28 +191,29 @@ procedure AARM_202x_CH06 is
       use P;
       generic
          type Formal (<>) is new Root with private;
-         Value : Formal; --@@
+         Value : Formal; --@@ Note (PP): initial value for unconstrained type initilisation
       package G is
-      -- ...
+      --@ ...
       end G;
 
       package body G is
-         -- ...
-         X : Formal := Value; --@@
-         -- ...
-         procedure Test (P : access procedure (X : Formal)) is null;
+         --@ ...
+         X : Formal := Value; --@@ Note (PP): initial value for unconstrained type initilisation
+         --@ ...
+         procedure Test (P : access procedure (X : Formal)) is null; --@@ Note (PP): added to test Proc'Access
       begin
          Proc (X); -- This is a dispatching call in Instance, because
          -- the actual type for Formal is class-wide.
-         -- ...
+         --@ ...
          -- Proc'Access would be illegal here, because it is of
          -- convention Intrinsic, by the above rule.
-         -- Test(Proc'Access); --@@ no GNAT error, yes with compile file not wit check sementic
+         -- Test(Proc'Access); --@@ Note (PP): illegal, GNAT error with compile file but not with check sementic
       end G;
 
       type Actual is new Root with null record;
       procedure Proc (X : Actual) is null;
-      package Instance is new G (Formal => Actual'Class, Value => Actual'(Root with null record)); --@@
+      package Instance is new G (Formal => Actual'Class, Value => Actual'(Root with null record));
+      --@@ Note (PP): initial value for unconstrained type initilisation
       -- It is legal to pass in a class-wide actual, because Formal
       -- has unknown discriminants.
 
@@ -334,8 +335,8 @@ procedure AARM_202x_CH06 is
          X : Element renames Some_Global_Array (Param.C);
       begin
          Global.C := Global.C + 1;
-         Swap (X, Some_Global_Array (Param.C)); --illegal but no GNAT error!
-         -- swap (x, x); GNAT error
+         Swap (X, Some_Global_Array (Param.C)); --@@ Note (PP): illegal but no GNAT error!
+         -- swap (x, x); --@@ Note (PP): GNAT error: writable actual for "L" overlaps with actual for "R"
       end Foo;
       type Some_Type is new Integer;
       function Func_With_Out_Params (V : out Some_Type) return Some_Type is (0);
@@ -385,6 +386,24 @@ procedure AARM_202x_CH06 is
    begin
       null;
    end Section_6_5_Paragraph_21g;
+
+   procedure Section_6_5_Paragraph_28y is
+
+      type Rec is record
+         Count, Max : Natural;
+      end record with
+         Dynamic_Predicate => Rec.Count <= Rec.Max;
+
+      function Foo return Rec is
+      begin
+         return Result : Rec := (Count => 5, Max => 10) do
+            Result.Max := 0;
+         end return;
+      end Foo;
+
+   begin
+      null;
+   end Section_6_5_Paragraph_28y;
 
    --       Examples of return statements:
    --

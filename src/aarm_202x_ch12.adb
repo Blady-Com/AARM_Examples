@@ -150,7 +150,7 @@ procedure AARM_202x_CH12 is
       end record;
 
       generic
-         type Formal is new T1 with private; --@@ MODIF04 PP added with private
+         type Formal is new T1 with private;
       package G1 is
          type Derived_From_Formal is new Formal with record
             NTCF2 : NTCT; --@ ...
@@ -221,6 +221,7 @@ procedure AARM_202x_CH12 is
          -- A predefined "=" operator is implicitly declared here:
          -- function "="(Left, Right : T1) return Boolean;
          -- Call this "="(1).
+         --@ ...
       package G2 is
          subtype S1 is T1; -- So we can get our hands on the type from
          -- outside an instance.
@@ -229,10 +230,10 @@ procedure AARM_202x_CH12 is
          -- function "="(Left, Right : T2) return Boolean;
          -- Call this "="(2).
 
-         T1_Obj : T1; --@@ ...; MODIF05 PP what value of T1?
+         T1_Obj : T1; --@ := ...; --@@ Note (PP): initial value may come from extra generic formal of type T1
          Bool_1 : Boolean := T1_Obj = T1_Obj;
 
-         T2_Obj : T2; --@@ ...; MODIF05 PP what value of T2?
+         T2_Obj : T2; --@ := ...; --@@ Note (PP): initial value may come from T2 conversion of extra generic formal of type T1
          Bool_2 : Boolean := T2_Obj = T2_Obj;
       end G2;
              --@   ...
@@ -249,7 +250,7 @@ procedure AARM_202x_CH12 is
       end P2;
       use P2;
                 --@  ...
-      package I is new G2 (T1 => My_Int); -- "="(5) is declared in I (see below).
+      package I is new G2 (T1 => My_Int); --@ , ...); -- "="(5) is declared in I (see below).
       use I;
 
       Another_T1_Obj : S1      := 13; -- Can't denote T1, but S1 will do.
@@ -497,7 +498,8 @@ procedure AARM_202x_CH12 is
       type T is tagged null record;
       procedure Bar (Obj : in T) is null;
       type Something is new T with null record;
-      procedure Some_Proc (Obj : in Something) is null;
+      procedure Some_Proc1 (Obj : in Something'Class) is null;
+      procedure Some_Proc2 (Obj : in Something) is null;
 
       generic
          type T (<>) is tagged private;
@@ -506,12 +508,13 @@ procedure AARM_202x_CH12 is
       is
       end P;
 
-      --  package New_P is new P (Something'Class, Some_Proc);  --@@ MODIF06 PP error: no visible subprogram matches the specification for "Foo"
+--        package New_P is new P (Something'Class, Some_Proc1);  --@@ Note (PP): illegal
+--        package New_P is new P (Something'Class, Some_Proc2);  --@@ MODIF06 PP GNAT error: no visible subprogram matches the specification for "Foo"
 
       generic
          type NT (<>) is new T with private;
          -- Presume that T has the following primitive operation:
-         -- with procedure Bar (Obj : in T);
+         -- procedure Bar (Obj : in T);
       package Gr --@ ...
       is
       end Gr;
@@ -523,7 +526,7 @@ procedure AARM_202x_CH12 is
          package New_P2 is new P (NT, Foo => Bar);
       end Gr;
 
-      --        package New_Gr is new Gr (Something'Class);  --@@ MODIF06 PP error: no visible subprogram matches the specification for "Foo"
+      -- package New_Gr is new Gr (Something);  --@@ MODIF17 PP error: no visible subprogram matches the specification for "Foo"
 
    end Section_12_6_Paragraph_8g;
 
@@ -542,7 +545,8 @@ procedure AARM_202x_CH12 is
          with function Image (X : Enum) return String is Enum'Image;
          with procedure Update is Default_Update;
          with procedure Pre_Action (X : in Item) is null;  -- defaults to no action
-         with procedure Write (S : not null access Root_Stream_Type'Class; Desc : Descriptor) is abstract Descriptor'
+         with procedure Write
+           (S : not null access Root_Stream_Type'Class; Desc : Descriptor) is abstract Descriptor'
            Write;  -- see 13.13.2
          -- Dispatching operation on Descriptor with default
       procedure P;

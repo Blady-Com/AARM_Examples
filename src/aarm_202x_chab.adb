@@ -52,6 +52,23 @@ procedure AARM_202x_CHAB is
          Convention    => C,
          External_Name => "strcpy";
 
+      -- Call <sdtio.h>printf:
+      -- C definition of printf:  int printf ( const char * format, ... );
+      --    This function writes the C string pointed by format to the standard output (stdout).
+      --     If format includes format specifiers (subsequences beginning with %), the additional
+      --     arguments following format are formatted and inserted in the resulting string
+      --     replacing their respective specifiers. If the number of arguments does not match
+      --     the number of format specifiers, or if the types of the arguments do not match
+      --     the corresponding format specifier, the behaviour is undefined. On success, the
+      --     printf function returns the total number of characters written to the standard output.
+      --     If a writing error occurs, a negative number is returned.
+
+      -- Note: since the C function's return value is of no interest, the Ada interface is a procedure
+      procedure Printf (Format : in C.char_array) with
+         Import        => True,
+         Convention    => C_Variadic_1,
+         External_Name => "printf";
+
       Chars1 : C.char_array (1 .. 20);
       Chars2 : C.char_array (1 .. 20);
 
@@ -61,6 +78,8 @@ procedure AARM_202x_CHAB is
       Strcpy (Chars1, Chars2);
 
       -- Now Chars1(1..6) = "qwert" & C.Nul
+
+--        Printf("The String=%s, Length=%d", Chars1, Chars1'Length);  --@@ MODIF PP: not yet available
    end Test;
 
    --     B.3.1 The Package Interfaces.C.Strings
@@ -71,8 +90,8 @@ procedure AARM_202x_CHAB is
 
    procedure Test_Pointers is
       package C renames Interfaces.C;
-      package Char_Ptrs is new C.Pointers (Index => C.size_t, Element => C.char, Element_Array => C.char_array,
-         Default_Terminator                      => C.nul);
+      package Char_Ptrs is new C.Pointers
+        (Index => C.size_t, Element => C.char, Element_Array => C.char_array, Default_Terminator => C.nul);
 
       use type Char_Ptrs.Pointer;
       subtype Char_Star is Char_Ptrs.Pointer;
