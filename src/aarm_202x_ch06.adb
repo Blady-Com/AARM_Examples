@@ -5,7 +5,7 @@ procedure AARM_202x_CH06 is
       type Real is digits 8;
       type Matrix is array (Integer range <>, Integer range <>) of Real;
       type Vector is array (Integer range <>) of Real;
-      subtype Month_Name is String (1 .. 3);
+      type Month_Name is (Jan, Feb, Mar, Apr, May, Jun, July, Aug, Sep, Oct, Nov, Dec);
       type Gender is (M, F);
       type Date is record
          Day   : Integer range 1 .. 31;

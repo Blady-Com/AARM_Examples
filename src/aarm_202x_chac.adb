@@ -13,12 +13,12 @@ procedure AARM_202x_CHAC is
       --     27  Example of interrupt handlers:
 
       Device_Priority : constant array (Ada.Interrupts.Interrupt_ID range 1 .. 5) of System.Interrupt_Priority :=
-        (1, 2, 3, 4, 5);
-      protected type Device_Interface (Int_Id : Ada.Interrupts.Interrupt_ID) with
-         Interrupt_Priority => Device_Priority (Int_Id)
+        (63, 63, 63, 63, 63);
+      protected type Device_Interface (Int_Id : Ada.Interrupts.Interrupt_ID) -- with
+--           Interrupt_Priority => Device_Priority (Int_Id)     --@@ MODIF25 GNAT error: "Int_Id" is undefined
       is
-         procedure Handler with
-            Attach_Handler => Int_Id;
+         procedure Handler; -- with
+--              Attach_Handler => Int_Id;    --  --@@ MODIF25 GNAT error: entity for aspect "Attach_Handler" must be library level entity
          --@ ...
       end Device_Interface;
       --@ ...
@@ -44,7 +44,7 @@ procedure AARM_202x_CHAC is
 
       type Atomic_Boolean is new Boolean with
          Atomic;
-      package Exchange is new Atomic_Operations.Exchange (Atomic_Type => Atomic_Boolean);
+--        package Exchange is new Atomic_Operations.Exchange (Atomic_Type => Atomic_Boolean);   --@@ MODIF PP: not yet available
 
       Lock : aliased Atomic_Boolean := False;
 
@@ -53,9 +53,9 @@ procedure AARM_202x_CHAC is
    begin -- Some critical section, trying to get the lock:
 
       -- Obtain the lock
-      while Exchange.Atomic_Exchange (Item => Lock, Value => True) loop
-         null;
-      end loop;
+--        while Exchange.Atomic_Exchange (Item => Lock, Value => True) loop   --@@ MODIF PP: not yet available
+--           null;
+--        end loop;
 
       --@ ... -- Do stuff
 

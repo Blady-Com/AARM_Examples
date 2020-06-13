@@ -10,7 +10,7 @@ procedure AARM_202x_CH03 is
       type Coordinate is (X, Y);
       type Real is digits 8;
       type Matrix is array (Integer range <>, Integer range <>) of Real;
-      subtype Month_Name is String (1 .. 3);
+      type Month_Name is (Jan, Feb, Mar, Apr, May, Jun, July, Aug, Sep, Oct, Nov, Dec);
       type Gender is (M, F);
       type Date is record
          Day   : Integer range 1 .. 31;
@@ -466,8 +466,8 @@ procedure AARM_202x_CH03 is
    --  3.8 Record Types
 
    package Section_3_8_Paragraph_27 is
-      use Section_3_5_7_Paragraph_28;
-      subtype Month_Name is String (1 .. 3);
+      use Needed_To_Compile;
+
       type Date is record
          Day   : Integer range 1 .. 31;
          Month : Month_Name;

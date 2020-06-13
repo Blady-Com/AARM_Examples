@@ -11,7 +11,7 @@ procedure AARM_202x_CH05 is
       type Real is digits 8;
       type Matrix is array (Integer range <>, Integer range <>) of Real;
       type Vector is array (Integer range <>) of Real;
-      subtype Month_Name is String (1 .. 3);
+      type Month_Name is (Jan, Feb, Mar, Apr, May, Jun, July, Aug, Sep, Oct, Nov, Dec);
       type Date is record
          Day   : Integer range 1 .. 31;
          Month : Month_Name;
@@ -246,7 +246,7 @@ procedure AARM_202x_CH05 is
 
       -- A target_name can be used multiple times and as a prefix if needed.
 
-      Board (1, 1) := @ + 1.0;  -- An abbreviation for Board(1, 1) := Board(1, 1) + 1.0; --@@ MODIF23 PP: missing ".0"
+      Board (1, 1) := @ + 1.0;  -- An abbreviation for Board(1, 1) := Board(1, 1) + 1.0;
       -- (Board is declared in 3.6.1).
 
    end Section_5_2_Paragraph_1;
@@ -437,7 +437,7 @@ procedure AARM_202x_CH05 is
             end;
          end loop;
 
-         Put_Line ("Total=" & Natural'Image (Partial_Sum'Reduce ("+", 0))); -- &  --@@ MODIF19 PP: GNAT error
+         Put_Line ("Total=" & Natural'Image (Partial_Sum'Reduce ("+", 0))); -- &  --@@ MODIF23 PP: add conversion to String
             --                      ", Min=" & Partial_Min'Reduce(Natural'Min, Natural'Last)'Image &  --@@ MODIF19 GNAT error: missing arguments for "Min" attribute (2 required)
             --                      ", Max=" & Partial_Max'Reduce(Natural'Max, 0)'Image);   --@@ MODIF19 GNAT error: missing arguments for "Max" attribute (2 required)
       end;
@@ -489,7 +489,7 @@ procedure AARM_202x_CH05 is
             Put_Line (My_Key_Type'Image (Key (C)) & " => " & My_Element_Type'Image (Element (C)));
          end P;
       begin
-         My_Map.Iterate (P'Access); --@@ MODIF23 PP: change Iterator into Iterate
+         My_Map.Iterate (P'Access);
       end;
 
          -- Example of iterating over the environment variables (see A.17):

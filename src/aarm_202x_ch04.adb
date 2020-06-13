@@ -270,7 +270,7 @@ procedure AARM_202x_CH04 is
       --          (declare
       --           R : constant array (Integer range <>) of Integer :=
       --           (for D in S'Range => Roman_Digit'Enum_Rep
-      --            (Roman_Digit'Value (''' & S(D) & '''))); -- See 3.5.2 and 13.4 --@@ MODIF20 PP: semicolon missing
+      --            (Roman_Digit'Value (''' & S(D) & '''))); -- See 3.5.2 and 13.4
       --           begin --@@ MODIF20 missing Roman_Number (
       --           [for I in R'Range =>  --@@ MODIF24 PP: GNAT error: "R" is undefined
       --             (if I < R'Last and then R(I) < R(I + 1) then -1 else 1) * R(I)] --@@ MODIF20 PP: superfluous )
@@ -390,8 +390,8 @@ procedure AARM_202x_CH04 is
 
       -- The base expression can be nontrivial:
 
-      New_Cell : Cell := (Min_Cell (Head) with delta Value => 42); --@@ MODIF20 PP: change Link to Head
-      -- see 3.10.1 for Cell and Link; 6.1 for Min_Cell
+      New_Cell : Cell := (Min_Cell (Head) with delta Value => 42);
+      -- see 3.10.1 for Cell and Head; 6.1 for Min_Cell
 
       A1 : Vector := ((0 => 1.0, 1 => 2.0, 2 => 3.0)
                         with delta Integer(Random * 2.0) => 14.2);
@@ -400,7 +400,7 @@ procedure AARM_202x_CH04 is
 
       -- The base expression may also be class-wide:
 
-      --        function Translate (P : Point'Class; X, Y : Real) return Point'Class is --@@ MODIF20 PP: change parameters type into Real
+      --        function Translate (P : Point'Class; X, Y : Real) return Point'Class is
       --          (P with delta X => P.X + X,
       --           Y => P.Y + Y); -- see 3.9 for declaration of type Point  --@@ MODIF21 PP: error: type "Point'Class" has no component with this name
 
@@ -459,6 +459,8 @@ procedure AARM_202x_CH04 is
       --                Vectors are always indexed starting at the
       --                  lower bound of their index subtype.
 
+      -- Private part not shown.
+      -- Needed to compile, sometimes dummy
    private
       type Set_Type is new Bit_Vector (Small_Natural); -- See 3.6.
       function Empty_Set return Set_Type is (others => False);
@@ -470,7 +472,7 @@ procedure AARM_202x_CH04 is
       Empty_Map : constant Map_Type := (Int_String_Maps.Empty_Map with null record);
       package String_Vectors is new Ada.Containers.Indefinite_Vectors -- See A.18.11.
         (Index_Type => Positive, Element_Type => String);
-      type Vector_Type is new String_Vectors.Vector with null record;   --@@ MODIF20 PP: missing "with null record"
+      type Vector_Type is new String_Vectors.Vector with null record;
    end Section_4_3_5_Paragraph_54;
 
    -- Examples of container aggregates for Set_Type, Map_Type, and Vector_Type:
@@ -521,7 +523,7 @@ procedure AARM_202x_CH04 is
          S := Empty_Set;
          for Item in -5 .. 5 loop
             if Item /= 0 then
-               Include (S, Item * 2);
+               Include (S, Item);
             end if;
          end loop;
 
@@ -567,13 +569,13 @@ procedure AARM_202x_CH04 is
             --  A map aggregate using an iterated_element_association
             --  and a key_expression, built from from a table of key/value pairs:
 
-            --  M := [for P of Table use P.Key => P.Value.all]; --@@ MODIF PP: not yet available --@@ MODIF20 PP: missing".all"
+            --  M := [for P of Table use P.Key => P.Value.all]; --@@ MODIF PP: not yet available
 
             --  Is equivalent to:
 
             M := Empty_Map;
             for P of Table loop
-               Add_To_Map (M, P.Key, P.Value.all); --@@ MODIF20 PP: missing ".all"
+               Add_To_Map (M, P.Key, P.Value.all);
             end loop;
 
          end;
@@ -732,7 +734,7 @@ procedure AARM_202x_CH04 is
 
    package Section_4_5_2_Paragraph_30c is
       type Root is tagged null record;
-      type Ext is new Root with record --@@ MODIF20 PP: missing "record"
+      type Ext is new Root with record
          Data : Integer;
       end record;
       function Is_Even (Param : Ext) return Boolean is (Param.Data mod 2 = 0);
@@ -880,7 +882,7 @@ procedure AARM_202x_CH04 is
       -- An expression function to compute the value of Pi:
 
       --  See 3.5.7.
-      function Pi (Number_Of_Steps : Natural := 10_000) return Real is   --@@ MODIF20 PP: missing conversion in Real type
+      function Pi (Number_Of_Steps : Natural := 10_000) return Real is
                 (1.0 / Real (Number_Of_Steps) *
                  [for I in 1 .. Number_Of_Steps =>
                    (4.0 / (1.0 + ((Real (I) - 0.5) * (1.0 / Real (Number_Of_Steps)))**2))]
@@ -919,7 +921,7 @@ procedure AARM_202x_CH04 is
 
    begin
       Put_Line ("Sum of Squares is" &
-                  Integer'Image([for I in 1 .. 10 => I**2]'Reduce("+", 0)));  --@@ MODIF20 PP: missing ending ")"
+                  Integer'Image([for I in 1 .. 10 => I**2]'Reduce("+", 0)));
    end Section_4_5_10_Paragraph_36;
 
    --  4.6 Type Conversions
