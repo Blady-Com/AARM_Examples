@@ -6,7 +6,8 @@ procedure AARM_202x_CH08 is
    package Needed_To_Compile is
       -- Needed to compile, sometimes dummy
       type NTCT is range 0 .. 20;
-      type Month_Name is (Jan, Feb, Mar, Apr, May, Jun, July, Aug, Sep, Oct, Nov, Dec);
+      type Month_Name is
+        (January, February, March, April, May, June, July, August, September, October, November, December);
       type Gender is (M, F);
       type Date is record
          Day   : Integer range 1 .. 31;
@@ -27,6 +28,7 @@ procedure AARM_202x_CH08 is
          end case;
       end record;
       Leftmost_Person : Person (F);
+      One             : constant := 1;
       type Queue is limited interface;
       procedure Append (Q : in out Queue; Person : in Person_Name) is abstract;
       procedure Remove_First (Q : in out Queue; Person : out Person_Name) is abstract;
@@ -192,6 +194,9 @@ procedure AARM_202x_CH08 is
       begin
          L.Age := L.Age + 1;
       end;
+
+      -- Example of renaming a value:
+--        Uno renames One;  -- see 3.3.2 --@@ MODIF PP: not yet available
    end Section_8_5_1_Paragraph_7;
 
    --  8.5.2 Exception Renaming Declarations

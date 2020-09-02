@@ -238,6 +238,7 @@ procedure AARM_202x_CHAA is
             declare
                N : Node := Target;
             begin
+               Prepend (The_Path, N);
                while N /= Source loop
                   N := Reached_From (N);
                   Prepend (The_Path, N);

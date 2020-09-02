@@ -32,9 +32,9 @@
 - MODIF18-CHAJ: sent to ACAA (20200613)
 - MODIF PP: general comment for a feature not yet available with GNAT Community 2020
 - MODIF19-CH05: sent to AdaCore (20200613)
-- MODIF20-CH04: sent to ACAA (20200525, 20200613) -> modified in draft 25 - partial
+- *MODIF20-CH04: sent to ACAA (20200525, 20200613) -> modified in draft 25 and 26*
 - MODIF21-CH04: sent to AdaCore (20200613)
 - MODIF22-CH04: sent to AdaCore (20200613)
-- MODIF23-CH05: sent to ACAA (20200526, 20200613) -> modified in draft 25 - partial
+- *MODIF23-CH05: sent to ACAA (20200526, 20200613) -> modified in draft 25 and 26*
 - MODIF24-CH04: sent to AdaCore (20200613)
 - MODIF25-CHAC: sent to AdaCore (20200613)

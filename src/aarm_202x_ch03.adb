@@ -10,7 +10,8 @@ procedure AARM_202x_CH03 is
       type Coordinate is (X, Y);
       type Real is digits 8;
       type Matrix is array (Integer range <>, Integer range <>) of Real;
-      type Month_Name is (Jan, Feb, Mar, Apr, May, Jun, July, Aug, Sep, Oct, Nov, Dec);
+      type Month_Name is
+        (January, February, March, April, May, June, July, August, September, October, November, December);
       type Gender is (M, F);
       type Date is record
          Day   : Integer range 1 .. 31;
@@ -235,6 +236,8 @@ procedure AARM_202x_CH03 is
    package Section_3_5_1_Paragraph_14 is
       use Needed_To_Compile;
       type Day is (Mon, Tue, Wed, Thu, Fri, Sat, Sun);
+      type Month_Name is
+        (January, February, March, April, May, June, July, August, September, October, November, December);
       type Suit is (Clubs, Diamonds, Hearts, Spades);
       type Gender is (M, F);
       type Level is (Low, Medium, Urgent);

@@ -11,7 +11,8 @@ procedure AARM_202x_CH05 is
       type Real is digits 8;
       type Matrix is array (Integer range <>, Integer range <>) of Real;
       type Vector is array (Integer range <>) of Real;
-      type Month_Name is (Jan, Feb, Mar, Apr, May, Jun, July, Aug, Sep, Oct, Nov, Dec);
+      type Month_Name is (January, February, March, April, May, June, July,
+                          August, September, October, November, December);
       type Date is record
          Day   : Integer range 1 .. 31;
          Month : Month_Name;
@@ -437,7 +438,7 @@ procedure AARM_202x_CH05 is
             end;
          end loop;
 
-         Put_Line ("Total=" & Natural'Image (Partial_Sum'Reduce ("+", 0))); -- &  --@@ MODIF23 PP: add conversion to String
+         Put_Line ("Total=" & Natural'Image (Partial_Sum'Reduce ("+", 0))); -- &  --@@ MODIF19 GNAT error
             --                      ", Min=" & Partial_Min'Reduce(Natural'Min, Natural'Last)'Image &  --@@ MODIF19 GNAT error: missing arguments for "Min" attribute (2 required)
             --                      ", Max=" & Partial_Max'Reduce(Natural'Max, 0)'Image);   --@@ MODIF19 GNAT error: missing arguments for "Max" attribute (2 required)
       end;

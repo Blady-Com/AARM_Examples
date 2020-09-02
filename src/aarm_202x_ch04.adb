@@ -16,7 +16,8 @@ procedure AARM_202x_CH04 is
       type Point is tagged record
          X, Y : Real := 0.0;
       end record;
-      type Month_Name is (Jan, Feb, Mar, Apr, May, Jun, July, Aug, Sep, Oct, Nov, Dec);
+      type Month_Name is (January, February, March, April, May, June, July,
+                          August, September, October, November, December);
       type Date is record
          Day   : Integer range 1 .. 31;
          Month : Month_Name;
@@ -268,12 +269,12 @@ procedure AARM_202x_CH04 is
 
       --        function To_Roman_Number (S : String) return Roman_Number is
       --          (declare
-      --           R : constant array (Integer range <>) of Integer :=
+      --           R : constant array (Integer range <>) of Roman_Number :=
       --           (for D in S'Range => Roman_Digit'Enum_Rep
       --            (Roman_Digit'Value (''' & S(D) & '''))); -- See 3.5.2 and 13.4
-      --           begin --@@ MODIF20 missing Roman_Number (
+      --           begin
       --           [for I in R'Range =>  --@@ MODIF24 PP: GNAT error: "R" is undefined
-      --             (if I < R'Last and then R(I) < R(I + 1) then -1 else 1) * R(I)] --@@ MODIF20 PP: superfluous )
+      --             (if I < R'Last and then R(I) < R(I + 1) then -1 else 1) * R(I)]
       --                      'Reduce("+", 0)
       --          );
 
@@ -408,7 +409,7 @@ procedure AARM_202x_CH04 is
       procedure The_Answer (V : in out Vector; A, B : in Integer) is null;
 
    begin
-      Tomorrow := ((Yesterday with delta Day => 12) with delta Month => Apr); -- see 3.8
+      Tomorrow := ((Yesterday with delta Day => 12) with delta Month => April); -- see 3.8
    end Section_4_3_4_Paragraph_22;
 
    --  4.3.5 Container Aggregates

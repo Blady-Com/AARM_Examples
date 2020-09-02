@@ -19,7 +19,8 @@ procedure AARM_202x_CH09 is
       protected type Some_Other_Protected_Type is
          procedure Some_Op;
       end Some_Other_Protected_Type;
-      type Month_Name is (Jan, Feb, Mar, Apr, May, Jun, July, Aug, Sep, Oct, Nov, Dec);
+      type Month_Name is
+        (January, February, March, April, May, June, July, August, September, October, November, December);
       type Gender is (M, F);
       type Date is record
          Day   : Integer range 1 .. 31;
