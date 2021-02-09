@@ -531,7 +531,7 @@ procedure AARM_202x_CH05 is
 
    procedure Section_5_6_1_Paragraph_4 is
       use Needed_To_Compile;
-      procedure Traverse (T : Expr_Ptr) is -- see 3.9
+      procedure Traverse (T : Expr_Ptr) is -- see 3.9.1
       begin
          if T /= null and then T.all in Binary_Operation'Class -- see 3.9.1
          then -- recurse down the binary tree

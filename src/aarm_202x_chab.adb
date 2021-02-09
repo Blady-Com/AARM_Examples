@@ -64,7 +64,7 @@ procedure AARM_202x_CHAB is
       --     If a writing error occurs, a negative number is returned.
 
       -- Note: since the C function's return value is of no interest, the Ada interface is a procedure
-      procedure Printf (Format : in C.char_array) with
+      procedure Printf (Format : in C.char_array; Param1 : in C.char_array; Param2 : in C.int) with
          Import        => True,
          Convention    => C_Variadic_1,
          External_Name => "printf";

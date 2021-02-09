@@ -255,7 +255,7 @@ procedure AARM_202x_CH04 is
 
       --                                    Examples
 
-      subtype Roman_Character is Character with
+      subtype Roman_Character is Wide_Wide_Character with
            Static_Predicate => Roman_Character in 'I' | 'V' | 'X' | 'L' | 'C' | 'D' | 'M';
 
       Max_Roman_Number : constant := 3_999;  -- MMMCMXCIX
@@ -263,15 +263,15 @@ procedure AARM_202x_CH04 is
       type Roman_Number is range 1 .. Max_Roman_Number;
       --          with String_Literal => To_Roman_Number; --@@ MODIF PP: not yet available
 
-      --        function To_Roman_Number (S : String) return Roman_Number
+      --        function To_Roman_Number (S : Wide_Wide_String) return Roman_Number
       --          with Pre => S'Length > 0 and then
       --          (for all Char of S => Char in Roman_Character);
 
-      --        function To_Roman_Number (S : String) return Roman_Number is
+      --        function To_Roman_Number (S : Wide_Wide_String) return Roman_Number is
       --          (declare
       --           R : constant array (Integer range <>) of Roman_Number :=
       --           (for D in S'Range => Roman_Digit'Enum_Rep
-      --            (Roman_Digit'Value (''' & S(D) & '''))); -- See 3.5.2 and 13.4
+      --            (Roman_Digit'Wide_Wide_Value (''' & S(D) & '''))); -- See 3.5.2 and 13.4
       --           begin
       --           [for I in R'Range =>  --@@ MODIF24 PP: GNAT error: "R" is undefined
       --             (if I < R'Last and then R(I) < R(I + 1) then -1 else 1) * R(I)]
@@ -522,10 +522,11 @@ procedure AARM_202x_CH04 is
          --  Is equivalent (assuming set semantics) to:
 
          S := Empty_Set;
-         for Item in -5 .. 5 loop
-            if Item /= 0 then
-               Include (S, Item);
-            end if;
+         for Item in 1 .. 5 loop
+            Include (S, Item);
+         end loop;
+         for Item in -5 .. -1 loop
+            Include (S, Item);
          end loop;
 
       end Set_Type_Example;
@@ -612,7 +613,6 @@ procedure AARM_202x_CH04 is
       procedure Vector_Type_Example is
          M                     : Map_Type;
          estimate_of_size_of_M : constant Count_Type := M.Length;
-         procedure Add_Positional (V : Vector_Type; E : String) is null;
 
          V : Vector_Type;
       begin
@@ -666,7 +666,7 @@ procedure AARM_202x_CH04 is
 
          V := Empty_Vector (estimate_of_size_of_M);
          for Elem of M loop
-            Add_Positional (V, Elem);
+            Append_One (V, Elem);
          end loop;
 
       end Vector_Type_Example;
