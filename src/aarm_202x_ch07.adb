@@ -385,9 +385,7 @@ procedure AARM_202x_CH07 is
 
    --  7.3.2 Type Invariants
 
---                                       Examples
-
--- {AI12-0312-1} A work scheduler where only urgent work can be scheduled for weekends:
+   -- Example of a work scheduler where only urgent work can be scheduled for weekends:
 
    package Work_Orders is
 

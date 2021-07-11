@@ -33,7 +33,7 @@ procedure AARM_202x_CH04 is
          Succ  : Link;
          Pred  : Link;
       end record;
-      Head : Link := new Cell'(0, null, null);
+      Head : constant Link := new Cell'(0, null, null);
       function Min_Cell (X : Link) return Cell is ((0, X, X));
       subtype Probability is Real range 0.0 .. 1.0;
       function Random return Probability is (0.5);
@@ -144,6 +144,8 @@ procedure AARM_202x_CH04 is
 
    package Section_4_1_5_Paragraph_9 is
 
+      -- Examples of the specification and use of generalized references:
+
       type Element is new Integer;
       type Barrel is tagged record  -- holds objects of type Element
          E : aliased Element;
@@ -155,9 +157,10 @@ procedure AARM_202x_CH04 is
       -- "Data" is its reference discriminant.
 
       function Find (B : aliased in out Barrel; Key : String) return Ref_Element;
-      -- Return a reference to an element of a barrel.
+      -- Returns a reference to an element of a barrel.
 
       B : aliased Barrel;
+
    private
       type Ref_Element (Data : access Element) is null record;
    end Section_4_1_5_Paragraph_9;
@@ -178,6 +181,8 @@ procedure AARM_202x_CH04 is
    --  4.1.6 User-Defined Indexing
 
    package Section_4_1_6_Paragraph_18 is
+
+      -- Examples of the specification and use of generalized indexing:
 
       type Element is new Integer;
       type Indexed_Barrel is tagged --@ ...
@@ -230,6 +235,17 @@ procedure AARM_202x_CH04 is
 
    --  4.2.1 User-Defined Literals
 
+   procedure Section_4_2_1_Paragraph_5c is
+      package Pkg1 is
+         type T is record X, Y : Integer; end record
+           with Integer_Literal => Int_Lit;
+         function Int_Lit (X, Y : T) return Duration is (0.0);    -- Wrong profile.
+         function Int_Lit (Lit_Image : String) return T is (0,0); -- Right profile.
+      end Pkg1;
+   begin
+      null;
+   end Section_4_2_1_Paragraph_5c;
+
    procedure Section_4_2_1_Paragraph_6b is
       package Pkg2 is
          type T1 is record
@@ -244,7 +260,8 @@ procedure AARM_202x_CH04 is
          X : T2 := 123;
       end Pkg2;
 
-      --       {AI12-0342-1} the initial value of Pkg.X is (0,0), not (1,1).
+      -- the initial value of Pkg2.X is (1,1), not (0,0).  --@@ Note (PP): GNAT error: CE 2021 gives (0,0)
+
    begin
       null;
    end Section_4_2_1_Paragraph_6b;
@@ -414,7 +431,7 @@ procedure AARM_202x_CH04 is
 
    --  4.3.5 Container Aggregates
 
-   -- Declarations of Set_Type, Map_Type, and Vector_Type:
+   -- Examples of specifying the Aggregate aspect for a Set_Type, a Map_Type, and a Vector_Type:
 
    package Section_4_3_5_Paragraph_54 is
       use Needed_To_Compile;
@@ -427,9 +444,9 @@ procedure AARM_202x_CH04 is
 
       function Empty_Set return Set_Type;
 
-      subtype Small_Natural is Natural range 0 .. 1000;
+      subtype Small_Int is Integer range -1000 .. 1000;
 
-      procedure Include (S : in out Set_Type; N : in Small_Natural);
+      procedure Include (S : in out Set_Type; N : in Small_Int);
 
       --  Map_Type is a map-like container type.
 
@@ -449,7 +466,7 @@ procedure AARM_202x_CH04 is
       --                             New_Indexed    => New_Vector,
       --                             Assign_Indexed => Assign_Element);
 
-      function Empty_Vector (Capacity : Count_Type := 0) return Vector_Type;
+      function Empty_Vector (Capacity : Integer := 0) return Vector_Type;
 
       procedure Append_One (V : in out Vector_Type; New_Item : in String);
 
@@ -463,7 +480,7 @@ procedure AARM_202x_CH04 is
       -- Private part not shown.
       -- Needed to compile, sometimes dummy
    private
-      type Set_Type is new Bit_Vector (Small_Natural); -- See 3.6.
+      type Set_Type is new Bit_Vector (Small_Int); -- See 3.6.
       function Empty_Set return Set_Type is (others => False);
       package Int_String_Maps is new Ada.Containers.Indefinite_Ordered_Maps  -- See A.18.14.
         (Key_Type => Integer, Element_Type => String);
@@ -658,20 +675,9 @@ procedure AARM_202x_CH04 is
             Assign_Element (V, I, Integer'Image (I));
          end loop;
 
-         --  A vector made from the elements of a map:
-
-         --              V := [for Elem of M => Elem]; --@@ MODIF PP: not yet available
-
-         --  Is equivalent to:
-
-         V := Empty_Vector (estimate_of_size_of_M);
-         for Elem of M loop
-            Append_One (V, Elem);
-         end loop;
-
       end Vector_Type_Example;
-      procedure Include (S : in out Set_Type; N : in Small_Natural) is null;
-      function Empty_Vector (Capacity : Count_Type := 0) return Vector_Type is (Empty_Vector (0));
+      procedure Include (S : in out Set_Type; N : in Small_Int) is null;
+      function Empty_Vector (Capacity : Integer := 0) return Vector_Type is (Empty_Vector (0));
       procedure Append_One (V : in out Vector_Type; New_Item : in String) is null;
       procedure Assign_Element (V : in out Vector_Type; Index : in Positive; Item : in String) is null;
       function New_Vector (First, Last : Positive) return Vector_Type is (Empty_Vector (0));
@@ -748,9 +754,9 @@ procedure AARM_202x_CH04 is
    --  Examples of expressions involving relational operators and membership tests:
 
    --      X /= Y
-   -- S : String := "A";
-   --        "" < S and S < "Aa"         --  True
-   --        S < "Bb" and S < "A  "      --  True
+   --          A_String = "A"                        -- True (see 3.3.1)
+   --          "" < A_String and A_String < "Aa"     -- True
+   --          A_String < "Bb" and A_String < "A  "  -- True
    --        My_Car = null               -- True if My_Car has been set to null (see 3.10.1)
    --        My_Car = Your_Car           -- True if we both share the same car
    --        My_Car.all = Your_Car.all   -- True if the two cars are identical
@@ -823,12 +829,14 @@ procedure AARM_202x_CH04 is
    procedure Section_4_5_7_Paragraph_22 is
       use Ada.Text_IO, Needed_To_Compile.Cards_And_Persons;
 
-      --                                  Examples
+      -- Example of use of a case_expression:
 
       function Card_Color (Card : Suit) return Color is -- see 3.5.1
         (case Card is when Clubs | Spades => Black, when Hearts | Diamonds => Red);
 
    begin
+      -- Example of use of an if_expression:
+
       Put_Line ("Casey is " & (if Casey.Sex = M then "Male" else "Female")); -- see 3.10.1
    end Section_4_5_7_Paragraph_22;
 
@@ -836,12 +844,14 @@ procedure AARM_202x_CH04 is
 
    package Section_4_5_8_Paragraph_10 is
       use Needed_To_Compile;
-      -- The postcondition for a sorting routine on an array A with an index subtype T can be written:
+      -- Example of a quantified expression as a
+      -- postcondition for a sorting routine on an array A with an index subtype T:
 
       --    Post => (A'Length < 2 or else
       --         (for all I in A'First .. T'Pred(A'Last) => A (I) <= A (T'Succ (I))))
 
-      -- The assertion that a positive number is composite (as opposed to prime) can be written:
+      -- Example of use of a quantified
+      -- expression as an assertion that a positive number N is composite (as opposed to prime):
 
       --              pragma Assert (for some X in 2 .. N when X * X <= N => N mod X = 0); --@@ MODIF PP: not yet available
       -- see iterator_filter in 5.5
@@ -850,7 +860,8 @@ procedure AARM_202x_CH04 is
 
    --  4.5.9 Declare Expressions
 
-   -- The postcondition for Ada.Containers.Vectors."&" (see A.18.2) could have been written:
+   -- Example of use of a declare expression as a
+   -- replacement postcondition for Ada.Containers.Vectors."&" (see A.18.2):
 
    -- with Post =>
    --       (declare
@@ -867,20 +878,21 @@ procedure AARM_202x_CH04 is
    procedure Section_4_5_10_Paragraph_36 is
       use Ada.Text_IO, Needed_To_Compile;
 
-      -- An expression function that returns its result as a Reduction Expression:
+      -- Example of an expression function that
+      -- returns its result as a reduction expression:
 
       function Factorial(N : Natural) return Natural is
         ([for J in 1..N => J]'Reduce("*", 1));
 
-      -- An expression function that computes the Sine of X using a Taylor expansion:
+      -- Example of a reduction expression that computes the Sine of X using a Taylor expansion:
 
       function Sine (X : Float; Num_Terms : Positive := 5) return Float is
              ([for I in 1..Num_Terms => (-1.0)**(I-1) * X**(2*I-1)/Float(Factorial(2*I-1))]
                 'Reduce("+", 0.0));
 
-      -- A reduction expression that outputs the sum of squares:
+      -- Example of a reduction expression that outputs the sum of squares:
 
-      -- An expression function to compute the value of Pi:
+      -- Example of a reductionn expression used to compute the value of Pi:
 
       --  See 3.5.7.
       function Pi (Number_Of_Steps : Natural := 10_000) return Real is
@@ -889,21 +901,21 @@ procedure AARM_202x_CH04 is
                    (4.0 / (1.0 + ((Real (I) - 0.5) * (1.0 / Real (Number_Of_Steps)))**2))]
                      'Reduce("+", 0.0));
 
-      -- Calculate the sum of elements of an array of integers:
+      -- Example of a reduction expression used to calculate the sum of elements of an array of integers:
 
       --    A'Reduce("+",0)  -- See 4.3.3.
 
-      -- Determine if all elements in a two dimensional array of booleans are set to true:
+      -- Example of a reduction expression used to etermine if all elements in a two dimensional array of booleans are set to true:
 
       --    Grid'Reduce("and", True)  -- See 3.6.
 
-      -- Calculate the minimum value of an array of integers in parallel:
+      -- Example of a reduction expression used to calculate the minimum value of an array of integers in parallel:
 
       --    A'Parallel_Reduce(Integer'Min, Integer'Last)
 
-      -- {AI12-0312-1} A parallel reduction expression used to calculate the mean
-      --of the elements of a two-dimensional array of subtype Matrix (see 3.6) that
-      --are greater than 100.0:
+      -- Example of a parallel reduction expression used to calculate the mean
+      -- of the elements of a two-dimensional array of subtype Matrix (see 3.6) that
+      -- are greater than 100.0:
 
       type Accumulator is record
          Sum   : Real; -- See 3.5.7.

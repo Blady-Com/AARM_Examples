@@ -9,7 +9,7 @@ procedure AARM_202x_CHAB is
 
    package Needed_To_Compile is
       -- Needed to compile, sometimes dummy
-      generic package COBOL_Sequential_IO renames ada.Direct_IO;
+      generic package COBOL_Sequential_IO renames Ada.Direct_IO;
    end Needed_To_Compile;
    use Needed_To_Compile;
 

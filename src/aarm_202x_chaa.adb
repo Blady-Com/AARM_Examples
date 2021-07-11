@@ -117,6 +117,8 @@ procedure AARM_202x_CHAA is
    procedure Section_A_10_8_Paragraph_26 is
       use Ada.Text_IO;
 
+      -- Examples of use of an instantiation of Text_IO.Integer_IO:
+
       subtype Byte_Int is Integer range -127 .. 127;
       package Int_IO is new Integer_IO (Byte_Int);
       use Int_IO;
@@ -135,8 +137,11 @@ procedure AARM_202x_CHAA is
    procedure Section_A_10_9_Paragraph_41 is
       use Ada.Text_IO;
 
+      -- Examples of use of an instantiation of Text_IO.Float_IO:
+
       package Real_IO is new Float_IO (Real);
       use Real_IO;
+
       -- default format used at instantiation, Default_Exp = 3
 
       X : Real := -123.4567;  --  digits 8      (see 3.5.7)
@@ -249,8 +254,62 @@ procedure AARM_202x_CHAA is
          end Shortest_Path;
       end Shortest_Paths;
 
+      type R_100 is range 1 .. 100;
+      package SP_100 is new Shortest_Paths (R_100);
+      use SP_100;
+      G       : Graphs.Vector;
+      L       : Adjacency_Lists.List;
+      Next    : R_100;
+      Reached : constant array (R_100) of Boolean := (others => False);
+
    begin
-      null;
+-- Note that the effect of the Constant_Indexing aspect (on
+-- type Vector) and the Implicit_Dereference aspect (on type Reference_Type) is that
+
+      L := G (Next);
+
+-- is a convenient shorthand for
+
+      L := G.Constant_Reference (Next).Element.all;
+
+-- Similarly, the effect of the loop:
+
+      for E of G (Next) loop
+         if not Reached (E.To) then
+            null; --@ ...
+         end if;
+      end loop;
+
+-- is the same as:
+
+      for C in G (Next).Iterate loop
+         declare
+            E : Edge renames G (Next) (C);
+         begin
+            if not Reached (E.To) then
+               null; --@ ...
+            end if;
+         end;
+      end loop;
+
+-- which is the same as:
+
+      declare
+         L : Adjacency_Lists.List renames G (Next);
+         C : Adjacency_Lists.Cursor := L.First;
+         use Adjacency_Lists;
+      begin
+         while Has_Element (C) loop
+            declare
+               E : Edge renames L (C);
+            begin
+               if not Reached (E.To) then
+                  null; --@ ...
+               end if;
+            end;
+--                C := L.Next (C); --@@ MODIF PP: not yet available
+         end loop;
+      end;
    end Section_A_18_33_Paragraph_1;
 
 begin

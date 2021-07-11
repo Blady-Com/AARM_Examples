@@ -8,7 +8,7 @@ procedure AARM_202x_CHAE is
 --        binding across active partitions:
 
    package Tapes is
---             pragma Pure(Tapes);
+--@     with Pure is
       type Tape is abstract tagged limited private;
       -- Primitive dispatching operations where
       -- Tape is controlling operand
@@ -21,7 +21,7 @@ procedure AARM_202x_CHAE is
 
 --         with Tapes;
    package Name_Server is
---             pragma Remote_Call_Interface;
+--@     with Remote_Call_Interface is
       -- Dynamic binding to remote operations is achieved
       -- using the access-to-limited-class-wide type Tape_Ptr
       type Tape_Ptr is access all Tapes.Tape'Class;

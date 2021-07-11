@@ -151,10 +151,8 @@ procedure AARM_202x_CH08 is
    --  8.3.1 Overriding Indicators
 
    package Section_8_3_1_Paragraph_9 is
-      -- The use of overriding_indicators allows the detection of
-      --errors at compile-time that otherwise might not be detected at all. For
-      --instance, we might declare a security queue derived from the Queue interface
-      --of 3.9.4 as:
+      -- Example of use of an overriding indicator
+      -- when declaring a security queue derived from the Queue interface of 3.9.4:
 
       type Security_Queue is new Queue with record
          NTCF : NTCT; --@ ...;
@@ -169,6 +167,7 @@ procedure AARM_202x_CH08 is
       overriding function Max_Count (Q : in Security_Queue) return Natural is (0);
 
       not overriding procedure Arrest (Q : in out Security_Queue; Person : in Person_Name) is null;
+
    end Section_8_3_1_Paragraph_9;
 
    --  8.4 Use Clauses

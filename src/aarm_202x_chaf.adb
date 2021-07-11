@@ -11,8 +11,8 @@ procedure AARM_202x_CHAF is
 
 --  F.3.2 Edited Output Generation
 
---  71  In the result string values shown below, 'b' represents the space
---  character.
+--  71  Examples of use of edited output; in the result string
+--  values shown below, 'b' represents the space character:
 --
 --  72      Item:         Picture and Result Strings:
 --

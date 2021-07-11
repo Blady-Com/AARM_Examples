@@ -16,11 +16,11 @@ procedure AARM_202x_CHAC is
         (63, 63, 63, 63, 63);
       protected type Device_Interface
         (Int_Id : Ada.Interrupts.Interrupt_ID) -- with
---           Interrupt_Priority => Device_Priority (Int_Id)     --@@ MODIF25 GNAT error: "Int_Id" is undefined
+--           Interrupt_Priority => Device_Priority (Int_Id)     --@@ MODIF25 PP: GNAT error: "Int_Id" is undefined
 
       is
          procedure Handler; -- with
---              Attach_Handler => Int_Id;    --  --@@ MODIF25 GNAT error: entity for aspect "Attach_Handler" must be library level entity
+--              Attach_Handler => Int_Id;    --  --@@ MODIF25 PP: GNAT error: entity for aspect "Attach_Handler" must be library level entity
          --@ ...
       end Device_Interface;
       --@ ...

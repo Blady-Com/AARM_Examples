@@ -137,7 +137,7 @@ procedure AARM_202x_CH03 is
       Size        : Integer range 0 .. 10_000 := 0;
       Sorted      : Boolean                   := False;
       Color_Table : array (1 .. Max) of Color;
-      Option      : Bit_Vector (1 .. 10)      := (others => True);
+      Option      : Bit_Vector (1 .. 10)      := (others => True); -- see 3.6
       Hello       : aliased String            := "Hi, world.";
       T, P        : Float range -Pi .. +Pi;
 
@@ -145,6 +145,7 @@ procedure AARM_202x_CH03 is
       Limit     : constant Integer       := 10_000;
       Low_Limit : constant Integer       := Limit / 10;
       Tolerance : constant Real          := Dispersion (1.15);
+      A_String  : constant String        := "A";
       Hello_Msg : constant access String := Hello'Access; -- see 3.10.2
    end Section_3_3_1_Paragraph_25;
 
@@ -367,7 +368,7 @@ procedure AARM_202x_CH03 is
       Rectangle : Matrix (1 .. 20, 1 .. 30);
       Inverse   : Matrix (1 .. N, 1 .. N);  --  N need not be static
 
-      Filter : Bit_Vector (0 .. 31);
+      Filter : Bit_Vector (0 .. 31);      --  see 3.6
 
       --  Example of array declaration with a constrained array subtype:
 
@@ -473,7 +474,7 @@ procedure AARM_202x_CH03 is
 
       type Date is record
          Day   : Integer range 1 .. 31;
-         Month : Month_Name;
+         Month : Month_Name;                  -- see 3.5.1
          Year  : Integer range 0 .. 4000;
       end record;
 

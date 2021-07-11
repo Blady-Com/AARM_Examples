@@ -174,6 +174,8 @@ procedure AARM_202x_CH10 is
 
    package Section_10_1_2_Paragraph_24 is
 
+      -- Examples of use of with clauses, limited with clauses, and private with clauses:
+
       package Office is
       end Office;
 
@@ -216,11 +218,15 @@ procedure AARM_202x_CH10 is
 
    procedure Section_10_1_3_Paragraph_19 is
 
-      --  The package Parent is first written without subunits:
+      -- Example that defines package Parent without subunits:
 
       package Parent is
          procedure Inner;
       end Parent;
+
+      -- Example showing how the body of procedure Inner may be
+      -- turned into a subunit by rewriting the package body as follows (with the
+      -- declaration of Parent remaining the same):
 
       --@      with Ada.Text_IO;
       package body Parent is

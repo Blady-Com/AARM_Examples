@@ -509,7 +509,7 @@ procedure AARM_202x_CH12 is
       end P;
 
 --        package New_P is new P (Something'Class, Some_Proc1);  --@@ Note (PP): illegal
---        package New_P is new P (Something'Class, Some_Proc2);  --@@ MODIF06 PP GNAT error: no visible subprogram matches the specification for "Foo"
+--        package New_P is new P (Something'Class, Some_Proc2);  --@@ MODIF06 PP: GNAT error: no visible subprogram matches the specification for "Foo"
 
       generic
          type NT (<>) is new T with private;

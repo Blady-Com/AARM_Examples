@@ -241,14 +241,17 @@ procedure AARM_202x_CH05 is
       My_Complex_Array : array (1 .. Max) of Complex; -- See 3.3.2, 3.8.
    begin
 
+      -- Examples of the use of target name symbols:
+
+      Board (1, 1) := @ + 1.0;  -- An abbreviation for Board(1, 1) := Board(1, 1) + 1.0;
+                                -- (Board is declared in 3.6.1).
+
       -- Square the element in the Count (see 3.3.1) position:
 
       My_Complex_Array (Count) := (Re => @.Re**2 - @.Im**2, Im => 2.0 * @.Re * @.Im);
 
       -- A target_name can be used multiple times and as a prefix if needed.
 
-      Board (1, 1) := @ + 1.0;  -- An abbreviation for Board(1, 1) := Board(1, 1) + 1.0;
-      -- (Board is declared in 3.6.1).
 
    end Section_5_2_Paragraph_1;
 
@@ -438,9 +441,9 @@ procedure AARM_202x_CH05 is
             end;
          end loop;
 
-         Put_Line ("Total=" & Natural'Image (Partial_Sum'Reduce ("+", 0))); -- &  --@@ MODIF19 GNAT error
-            --                      ", Min=" & Partial_Min'Reduce(Natural'Min, Natural'Last)'Image &  --@@ MODIF19 GNAT error: missing arguments for "Min" attribute (2 required)
-            --                      ", Max=" & Partial_Max'Reduce(Natural'Max, 0)'Image);   --@@ MODIF19 GNAT error: missing arguments for "Max" attribute (2 required)
+         Put_Line ("Total=" & Natural'Image (Partial_Sum'Reduce ("+", 0))); -- &  --@@ MODIF19 PP: GNAT error:
+            --                      ", Min=" & Partial_Min'Reduce(Natural'Min, Natural'Last)'Image &  --@@ MODIF19 PP: GNAT error: missing arguments for "Min" attribute (2 required)
+            --                      ", Max=" & Partial_Max'Reduce(Natural'Max, 0)'Image);   --@@ MODIF19 PP: GNAT error: missing arguments for "Max" attribute (2 required)
       end;
 
          -- {AI12-0312-1} For an example of an iterator_filter, see 4.5.8.
@@ -531,6 +534,9 @@ procedure AARM_202x_CH05 is
 
    procedure Section_5_6_1_Paragraph_4 is
       use Needed_To_Compile;
+
+      -- Example of a parallel block used to walk a binary tree in parallel:
+
       procedure Traverse (T : Expr_Ptr) is -- see 3.9.1
       begin
          if T /= null and then T.all in Binary_Operation'Class -- see 3.9.1
@@ -544,6 +550,8 @@ procedure AARM_202x_CH05 is
                --              end do;
          end if;
       end Traverse;
+
+      -- Example of a parallel block used to search two halves of a string in parallel:
 
       function Search (S : String; Char : Character) return Boolean is
       begin

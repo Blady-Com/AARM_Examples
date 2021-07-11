@@ -208,7 +208,7 @@ procedure AARM_202x_CH06 is
          --@ ...
          -- Proc'Access would be illegal here, because it is of
          -- convention Intrinsic, by the above rule.
-         -- Test(Proc'Access); --@@ Note (PP): illegal, GNAT error with compile file but not with check sementic
+         -- Test(Proc'Access); --@@ Note (PP): illegal, GNAT error: with compile file but not with check sementic
       end G;
 
       type Actual is new Root with null record;
@@ -422,6 +422,7 @@ procedure AARM_202x_CH06 is
 
    --  6.5.1 Nonreturning Procedures
 
+   -- Example of a specification of a No_Return aspect:
    procedure Fail
      (Msg : String)  -- raises Fatal_Error exception
    with
@@ -450,8 +451,13 @@ procedure AARM_202x_CH06 is
 
    package Section_6_7_Paragraph_6 is
       type Expression is tagged null record;
+
+      -- Example of the declaration of a null procedure:
+
       procedure Simplify (Expr : in out Expression) is null; -- see 3.9
+
       -- By default, Simplify does nothing, but it may be overridden in extensions of Expression
+
    end Section_6_7_Paragraph_6;
 
    --  6.8 Expression Functions
@@ -461,6 +467,9 @@ procedure AARM_202x_CH06 is
       type Point is tagged record
          X, Y : Real := 0.0;
       end record;
+
+      -- Example of an expression function:
+
       function Is_Origin (P : in Point) return Boolean is -- see 3.9
         (P.X = 0.0 and P.Y = 0.0);
    end Section_6_8_Paragraph_9;
