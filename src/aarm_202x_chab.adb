@@ -25,7 +25,9 @@ procedure AARM_202x_CHAB is
          Convention => Fortran;
       type Matrix is array (Natural range <>, Natural range <>) of Float with
          Convention => Fortran;
-      function Invert (M : Matrix) return Matrix with
+      function Invert
+        (M : Matrix)
+         return Matrix with --@@ Note (PP): foreign convention function "Invert" should not return unconstrained array
          Import     => True,
          Convention => Fortran;
    end Fortran_Library;
@@ -79,7 +81,7 @@ procedure AARM_202x_CHAB is
 
       -- Now Chars1(1..6) = "qwert" & C.Nul
 
---        Printf("The String=%s, Length=%d", Chars1, Chars1'Length);  --@@ MODIF PP: not yet available
+      Printf ("The String=%s, Length=%d", Chars1, Chars1'Length);
    end Test;
 
    --     B.3.1 The Package Interfaces.C.Strings
@@ -272,7 +274,7 @@ procedure AARM_202x_CHAB is
    begin
 
          --@ ...
-      My_Matrix := ((1.0, 1.0 / 2.0), (1.0 / 2.0, 1.0 / 3.0));  --@ ...;
+      My_Matrix := ((1.0, 1.0 / 2.0), (1.0 / 2.0, 1.0 / 3.0), others => (0.0, 0.0));  --@ ...;
            --@ ...
       Invert (Rank, My_Matrix);
            --@ ...

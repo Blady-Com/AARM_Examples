@@ -433,18 +433,21 @@ procedure AARM_202x_CH05 is
          for I in Grid'Range (1) loop
             declare
                True_Count : constant Natural :=
-                 [for J in Grid'Range(2) => (if Grid (I, J) then 1 else 0)]'Reduce("+",0);
-            begin
-               Partial_Sum (Chunk) := @ + True_Count;
-               Partial_Min (Chunk) := Natural'Min (@, True_Count);
-               Partial_Max (Chunk) := Natural'Max (@, True_Count);
-            end;
-         end loop;
+               [for J in Grid'Range(2) => (if Grid (I, J) then 1 else 0)]'Reduce("+",0);
+               begin
+                  Partial_Sum (Chunk) := @ + True_Count;
+                  Partial_Min (Chunk) := Natural'Min (@, True_Count);
+                  Partial_Max (Chunk) := Natural'Max (@, True_Count);
+               end;
+            end loop;
 
-         Put_Line ("Total=" & Natural'Image (Partial_Sum'Reduce ("+", 0))); -- &  --@@ MODIF19 PP: GNAT error:
-            --                      ", Min=" & Partial_Min'Reduce(Natural'Min, Natural'Last)'Image &  --@@ MODIF19 PP: GNAT error: missing arguments for "Min" attribute (2 required)
-            --                      ", Max=" & Partial_Max'Reduce(Natural'Max, 0)'Image);   --@@ MODIF19 PP: GNAT error: missing arguments for "Max" attribute (2 required)
-      end;
+--              Put_Line ("Total=" & Partial_Sum'Reduce ("+", 0)'Image &  --@@ MODIF26 PP: GNAT error: expected type universal integer
+--                          ", Min=" & Partial_Min'Reduce(Natural'Min, Natural'Last)'Image &  --@@ MODIF26 PP: GNAT error: expected type universal integer
+--                          ", Max=" & Partial_Max'Reduce(Natural'Max, 0)'Image);  --@@ MODIF26 PP: GNAT error: expected type universal integer
+            Put_Line ("Total=" & Natural'Image (Partial_Sum'Reduce ("+", 0)) &
+                        ", Min=" & Natural'Image (Partial_Min'Reduce(Natural'Min, Natural'Last)) &
+                        ", Max=" & Natural'Image (Partial_Max'Reduce(Natural'Max, 0)));
+         end;
 
          -- {AI12-0312-1} For an example of an iterator_filter, see 4.5.8.
 

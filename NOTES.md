@@ -28,13 +28,17 @@
 - *MODIF14: sent to ACAA (20191015) -> modified in draft 24*
 - *MODIF15: sent to ACAA (20191124) -> modified in draft 24*
 - *MODIF16: error: "Device_Done" not declared in "Names", Ada.Interrupts.Names is implementation defined -> ok*
-- MODIF17-CH12: sent to ACAA (20200613)
+- *MODIF17-CH12: sent to ACAA (20200613) -> ok with GNAT CE 2021*
 - MODIF18-CHAJ: sent to ACAA (20200613)
 - MODIF PP: general comment for a feature not yet available with GNAT Community 2020
-- MODIF19-CH05: sent to AdaCore (20200613)
+- *MODIF19-CH05: sent to AdaCore (20200613) -> ok with GNAT CE 2021*
 - *MODIF20-CH04: sent to ACAA (20200525, 20200613) -> modified in draft 25 and 26*
 - MODIF21-CH04: sent to AdaCore (20200613)
 - MODIF22-CH04: sent to AdaCore (20200613)
 - *MODIF23-CH05: sent to ACAA (20200526, 20200613) -> modified in draft 25 and 26*
 - MODIF24-CH04: sent to AdaCore (20200613)
 - MODIF25-CHAC: sent to AdaCore (20200613)
+- MODIF26-CH05: sent to AdaCore (20210714)
+- Note-CHAA: use clause for package "Node_Maps" has no effect, sent to ACAA (20210714)
+- Note-CHAB: foreign convention function "Invert" should not return unconstrained array, sent to ACAA (20210714)
+- Note-CH04: GNAT error: CE 2021 gives (0,0), sent to AdaCore (20200714)

@@ -190,7 +190,7 @@ procedure AARM_202x_CHAA is
 
       package body Shortest_Paths is
          function Shortest_Path (G : Graphs.Vector; Source : Node; Target : Node) return Paths.List is
-            use Node_Maps, Paths, Graphs;
+            use Node_Maps, Paths, Graphs; --@@ Note (PP): use clause for package "Node_Maps" has no effect
             Reached : array (Node) of Boolean := (others => False);
             -- The set of nodes whose shortest distance to the source is known.
 

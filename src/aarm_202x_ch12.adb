@@ -526,7 +526,7 @@ procedure AARM_202x_CH12 is
          package New_P2 is new P (NT, Foo => Bar);
       end Gr;
 
-      -- package New_Gr is new Gr (Something);  --@@ MODIF17 PP error: no visible subprogram matches the specification for "Foo"
+      package New_Gr is new Gr (Something);
 
    end Section_12_6_Paragraph_8g;
 

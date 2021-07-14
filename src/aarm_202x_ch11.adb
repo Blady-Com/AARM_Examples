@@ -60,8 +60,8 @@ procedure AARM_202x_CH11 is
       Pre : Boolean  := (if not Is_Valid (Param) then raise Not_Valid_Error);
       A   : A_Tagged := (Some_Tagged'(raise TBD_Error) with Comp => 'A');
       --                  B : Some_Array := (1, 2, 3, others => raise Not_Valid_Error); --@@ MODIF03 PP error: "others" choice not allowed here
-      C : Natural := Func (Val => raise TBD_Error);
-      --         D : A_Tagged   := ((raise TBD_Error) with Comp => 'A'); --@@ MODIF03 PP error: expect ancestor type of "A_Tagged"
+      C : Natural  := Func (Val => raise TBD_Error);
+      D : A_Tagged := ((raise TBD_Error) with Comp => 'A');
 
    end Section_11_3_Paragraph_2a;
 

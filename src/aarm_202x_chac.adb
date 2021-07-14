@@ -40,7 +40,6 @@ procedure AARM_202x_CHAC is
    --  C.6.1 The Package System.Atomic_Operations
 
    procedure Section_C_6_1_Paragraph_17 is
-      use System;
 
       --  17 Example of a spin lock using Atomic_Exchange:
 

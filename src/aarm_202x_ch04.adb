@@ -438,9 +438,9 @@ procedure AARM_202x_CH04 is
 
       --  Set_Type is a set-like container type.
 
-      type Set_Type is private; --@@ MODIF PP: not yet available
-      --          with Aggregate => (Empty       => Empty_Set,
-      --                             Add_Unnamed => Include);
+      type Set_Type is private
+        with Aggregate => (Empty       => Empty_Set,
+                           Add_Unnamed => Include);
 
       function Empty_Set return Set_Type;
 
@@ -450,9 +450,9 @@ procedure AARM_202x_CH04 is
 
       --  Map_Type is a map-like container type.
 
-      type Map_Type is private; --@@ MODIF PP: not yet available
-      --          with Aggregate =>  (Empty     => Empty_Map,
-      --                              Add_Named => Add_To_Map);
+      type Map_Type is private
+        with Aggregate =>  (Empty     => Empty_Map,
+                            Add_Named => Add_To_Map);
 
       procedure Add_To_Map (M : in out Map_Type; Key : in Integer; Value : in String);
 
@@ -460,11 +460,11 @@ procedure AARM_202x_CH04 is
 
       -- Vector_Type is an extensible array-like container type.
 
-      type Vector_Type is private; --@@ MODIF PP: not yet available
-      --          with Aggregate => (Empty          => Empty_Vector,
-      --                             Add_Unnamed    => Append_One,
-      --                             New_Indexed    => New_Vector,
-      --                             Assign_Indexed => Assign_Element);
+      type Vector_Type is private
+        with Aggregate => (Empty          => Empty_Vector,
+                           Add_Unnamed    => Append_One,
+                           New_Indexed    => New_Vector,
+                           Assign_Indexed => Assign_Element);
 
       function Empty_Vector (Capacity : Integer := 0) return Vector_Type;
 
@@ -853,7 +853,7 @@ procedure AARM_202x_CH04 is
       -- Example of use of a quantified
       -- expression as an assertion that a positive number N is composite (as opposed to prime):
 
-      --              pragma Assert (for some X in 2 .. N when X * X <= N => N mod X = 0); --@@ MODIF PP: not yet available
+      pragma Assert (for some X in 2 .. N when X * X <= N => N mod X = 0);
       -- see iterator_filter in 5.5
 
    end Section_4_5_8_Paragraph_10;
