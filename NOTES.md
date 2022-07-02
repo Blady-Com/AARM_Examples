@@ -36,9 +36,11 @@
 - MODIF21-CH04: sent to AdaCore (20200613)
 - MODIF22-CH04: sent to AdaCore (20200613)
 - *MODIF23-CH05: sent to ACAA (20200526, 20200613) -> modified in draft 25 and 26*
-- MODIF24-CH04: sent to AdaCore (20200613)
+- *MODIF24-CH04: sent to AdaCore (20200613) -> ok with GNAT 12.1.0*
 - MODIF25-CHAC: sent to AdaCore (20200613)
-- MODIF26-CH05: sent to AdaCore (20210714)
+- *MODIF26-CH05: sent to AdaCore (20210714) -> ok with GNAT 12.1.0*
 - Note-CHAA: use clause for package "Node_Maps" has no effect, sent to ACAA (20210714)
 - Note-CHAB: foreign convention function "Invert" should not return unconstrained array, sent to ACAA (20210714)
 - Note-CH04: GNAT error: CE 2021 gives (0,0), sent to AdaCore (20200714)
+- MODIF27-CH04: sent to GCC Bug 106168 (20220701)
+- MODIF28-CH04: sent to GCC Bug 106169 (20220701)

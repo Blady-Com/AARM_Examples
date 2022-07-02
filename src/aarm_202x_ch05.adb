@@ -441,12 +441,12 @@ procedure AARM_202x_CH05 is
                end;
             end loop;
 
---              Put_Line ("Total=" & Partial_Sum'Reduce ("+", 0)'Image &  --@@ MODIF26 PP: GNAT error: expected type universal integer
---                          ", Min=" & Partial_Min'Reduce(Natural'Min, Natural'Last)'Image &  --@@ MODIF26 PP: GNAT error: expected type universal integer
---                          ", Max=" & Partial_Max'Reduce(Natural'Max, 0)'Image);  --@@ MODIF26 PP: GNAT error: expected type universal integer
-            Put_Line ("Total=" & Natural'Image (Partial_Sum'Reduce ("+", 0)) &
-                        ", Min=" & Natural'Image (Partial_Min'Reduce(Natural'Min, Natural'Last)) &
-                        ", Max=" & Natural'Image (Partial_Max'Reduce(Natural'Max, 0)));
+            Put_Line ("Total=" & Partial_Sum'Reduce ("+", 0)'Image &
+                        ", Min=" & Partial_Min'Reduce(Natural'Min, Natural'Last)'Image &
+                        ", Max=" & Partial_Max'Reduce(Natural'Max, 0)'Image);
+            --@@ GNAT error: expected type universal integer
+            --@@ GNAT error: found type "Standard.Integer"
+
          end;
 
          -- {AI12-0312-1} For an example of an iterator_filter, see 4.5.8.

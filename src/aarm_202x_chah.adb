@@ -11,8 +11,8 @@ procedure AARM_202x_CHAH is
    -- An example of use of the Dispatching aspect:
 
    procedure My_Write   --  see 13.13.2
-     (Stream : not null access Ada.Streams.Root_Stream_Type'Class; Item : My_Integer'Base) is null;
---             with Dispatching => Write(Stream); --@@ MODIF PP: not yet available
+     (Stream : not null access Ada.Streams.Root_Stream_Type'Class; Item : My_Integer'Base) is null
+     with Dispatching => Write(Stream);
    for My_Integer'Write use My_Write;
 
 -- For examples of use of the Use_Formal aspect, see the

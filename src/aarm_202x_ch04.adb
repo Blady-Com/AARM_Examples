@@ -1,5 +1,3 @@
-with Ada.Containers.Indefinite_Ordered_Maps;
-with Ada.Containers.Indefinite_Vectors;
 with Ada.Text_IO;
 
 procedure AARM_202x_CH04 is
@@ -11,7 +9,7 @@ procedure AARM_202x_CH04 is
       type Bit_Vector is array (Integer range <>) of Boolean;
       type Table is array (1 .. 10) of Integer;
       M  : constant := 99;
-      N  : constant := 199;
+      N  : constant := 199 + 1;
       PI : constant := 3.14;
       type Point is tagged record
          X, Y : Real := 0.0;
@@ -25,7 +23,6 @@ procedure AARM_202x_CH04 is
       end record;
       Tomorrow, Yesterday : Date;
       type Vector is array (Integer range <>) of Real;
-      subtype Count_Type is Ada.Containers.Count_Type;
       type Cell;  --  incomplete type declaration
       type Link is access Cell;
       type Cell is record
@@ -273,32 +270,33 @@ procedure AARM_202x_CH04 is
       --                                    Examples
 
       subtype Roman_Character is Wide_Wide_Character with
-           Static_Predicate => Roman_Character in 'I' | 'V' | 'X' | 'L' | 'C' | 'D' | 'M';
+        Static_Predicate => Roman_Character in 'I' | 'V' | 'X' | 'L' | 'C' | 'D' | 'M';
 
       Max_Roman_Number : constant := 3_999;  -- MMMCMXCIX
 
-      type Roman_Number is range 1 .. Max_Roman_Number;
-      --          with String_Literal => To_Roman_Number; --@@ MODIF PP: not yet available
+      type Roman_Number is range 1 .. Max_Roman_Number
+        with String_Literal => To_Roman_Number;
 
-      --        function To_Roman_Number (S : Wide_Wide_String) return Roman_Number
-      --          with Pre => S'Length > 0 and then
-      --          (for all Char of S => Char in Roman_Character);
+      function To_Roman_Number (S : Wide_Wide_String) return Roman_Number
+        with Pre => S'Length > 0 and then
+        (for all Char of S => Char in Roman_Character);
 
-      --        function To_Roman_Number (S : Wide_Wide_String) return Roman_Number is
-      --          (declare
-      --           R : constant array (Integer range <>) of Roman_Number :=
-      --           (for D in S'Range => Roman_Digit'Enum_Rep
-      --            (Roman_Digit'Wide_Wide_Value (''' & S(D) & '''))); -- See 3.5.2 and 13.4
-      --           begin
-      --           [for I in R'Range =>  --@@ MODIF24 PP: GNAT error: "R" is undefined
-      --             (if I < R'Last and then R(I) < R(I + 1) then -1 else 1) * R(I)]
-      --                      'Reduce("+", 0)
-      --          );
+      function To_Roman_Number (S : Wide_Wide_String) return Roman_Number is
+        (declare
+         R : constant array (Integer range <>) of Roman_Number :=
+         (for D in S'Range => Roman_Digit'Enum_Rep
+          (Roman_Digit'Wide_Wide_Value (''' & S(D) & '''))); -- See 3.5.2 and 13.4
+         begin
+         [for I in R'Range =>
+           (if I < R'Last and then R(I) < R(I + 1) then -1 else 1) * R(I)]
+                          'Reduce("+", 0)
+         -- MODIF PP: warning: Constraint_Error will be raised at run time
+       );
 
-      --           X : Roman_Number := "III" * "IV" * "XII"; -- 144 (that is, CXLIV) --@@ MODIF PP: not yet available
-   begin
-      null;
-   end Section_4_2_1_Paragraph_15;
+         X : Roman_Number := "III" * "IV" * "XII"; -- 144 (that is, CXLIV)
+      begin
+         Ada.Text_IO.Put_Line ("III * IV * XII is " & X'Image);
+      end Section_4_2_1_Paragraph_15;
 
    --  4.3 Aggregates
 
@@ -384,7 +382,7 @@ procedure AARM_202x_CH04 is
           (for I in 1 .. 4 =>
              (for J in 1 .. 4 =>
                 (if I=J then 1.0 else 0.0))); -- Identity matrix
-   --        Empty_Matrix : constant Matrix := []; -- A matrix without elements --@@ MODIF PP: not yet available
+   -- Empty_Matrix : constant Matrix := []; -- A matrix without elements --@@ MODIF27 PP: error: value not in range of type "Standard.Integer"
    end Section_4_3_3_Paragraph_44;
 
    -- Example of an array aggregate with defaulted others
@@ -480,17 +478,13 @@ procedure AARM_202x_CH04 is
       -- Private part not shown.
       -- Needed to compile, sometimes dummy
    private
-      type Set_Type is new Bit_Vector (Small_Int); -- See 3.6.
-      function Empty_Set return Set_Type is (others => False);
-      package Int_String_Maps is new Ada.Containers.Indefinite_Ordered_Maps  -- See A.18.14.
-        (Key_Type => Integer, Element_Type => String);
-      type Map_Type is new Int_String_Maps.Map with null record;
-
-      procedure Add_To_Map (M : in out Map_Type; Key : in Integer; Value : in String) renames Insert;
-      Empty_Map : constant Map_Type := (Int_String_Maps.Empty_Map with null record);
-      package String_Vectors is new Ada.Containers.Indefinite_Vectors -- See A.18.11.
-        (Index_Type => Positive, Element_Type => String);
-      type Vector_Type is new String_Vectors.Vector with null record;
+      type Set_Type is array (1..10) of Boolean;
+      function Empty_Set return Set_Type is ([]);
+      type Map_Type is array (1..10) of String (1..10);
+      procedure Add_To_Map (M : in out Map_Type; Key : in Integer; Value : in String) is null;
+      -- Empty_Map : constant Map_Type := [1..10 => "          "]; -- MODIF PP: error: choice must be static
+      Empty_Map : constant Map_Type := []; -- MODIF PP: ICE
+      type Vector_Type is array (1..10) of Character;
    end Section_4_3_5_Paragraph_54;
 
    -- Examples of container aggregates for Set_Type, Map_Type, and Vector_Type:
@@ -512,7 +506,7 @@ procedure AARM_202x_CH04 is
 
          --  A positional set aggregate:
 
-         --           S := [1, 2]; --@@ MODIF PP: not yet available
+            S := [1, 2];
 
          --  Is equivalent to:
 
@@ -522,7 +516,7 @@ procedure AARM_202x_CH04 is
 
          --  A set aggregate with an iterated_element_association:
 
-         --           S := [for Item in 1 .. 5 => Item * 2]; --@@ MODIF PP: not yet available
+            S := [for Item in 1 .. 5 => Item * 2];
 
          --  Is equivalent to:
 
@@ -533,8 +527,8 @@ procedure AARM_202x_CH04 is
 
          --  A set aggregate consisting of two iterated_element_associations:
 
-         --           S := [for Item in 1 .. 5 => Item,
-         --             for Item in 1 .. 5 => -Item]; --@@ MODIF PP: not yet available
+            S := [for Item in 1 .. 5 => Item,
+                  for Item in 1 .. 5 => -Item];
 
          --  Is equivalent (assuming set semantics) to:
 
@@ -556,15 +550,15 @@ procedure AARM_202x_CH04 is
 
          --  Create an empty map:
 
-         --           M := []; --@@ MODIF PP: not yet available; canceled in draft 24
+            M := []; -- canceled in draft 24
 
          --  Is equivalent to:
 
-         M := Empty_Map;
+            M := Empty_Map;
 
          --  A simple named map aggregate:
 
-         --           M := [12 => "house", 14 => "beige"]; --@@ MODIF PP: not yet available
+            M := [12 => "house", 14 => "beige"];
 
          --  Is equivalent to:
 
@@ -588,7 +582,7 @@ procedure AARM_202x_CH04 is
             --  A map aggregate using an iterated_element_association
             --  and a key_expression, built from from a table of key/value pairs:
 
-            --  M := [for P of Table use P.Key => P.Value.all]; --@@ MODIF PP: not yet available
+            --  M := [for P of Table use P.Key => P.Value.all]; --@@ MODIF28 PP: error: invalid prefix in selected component "Value"
 
             --  Is equivalent to:
 
@@ -609,7 +603,7 @@ procedure AARM_202x_CH04 is
             --  iterated_element_association are of the same type as the key
             --  (eliminating the need for a separate key_expression):
 
-            --              M := [for Key of Keys => Integer'Image (Key)]; --@@ MODIF PP: not yet available
+            M := [for Key1 of Keys => Integer'Image (Key1)];
 
             --  Is equivalent to:
 
@@ -620,7 +614,7 @@ procedure AARM_202x_CH04 is
 
             --  The above could have been written using an explicit key_expression:
 
-            --              M := [for Key of Keys use Key => Integer'Image (Key)]; --@@ MODIF PP: not yet available, canceled in draft 24
+               M := [for Key2 of Keys use Key2 => Integer'Image (Key2)]; -- MODIF PP: key name conflicts with previous usage, canceled in draft 24
 
          end;
       end Map_Type_Example;
@@ -629,14 +623,13 @@ procedure AARM_202x_CH04 is
 
       procedure Vector_Type_Example is
          M                     : Map_Type;
-         estimate_of_size_of_M : constant Count_Type := M.Length;
 
          V : Vector_Type;
       begin
 
          --  Create an empty vector aggregate:
 
-         --              V := [];  --@@ MODIF PP: not yet available; canceled in draft 24
+            V := []; -- canceled in draft 24
 
          --  Is equivalent to:
 
@@ -644,7 +637,7 @@ procedure AARM_202x_CH04 is
 
          --  A positional vector aggregate:
 
-         --              V := ["abc", "def"]; --@@ MODIF PP: not yet available
+            V := ["abc", "def"];
 
          --  Is equivalent to:
 
@@ -654,7 +647,7 @@ procedure AARM_202x_CH04 is
 
          --  An indexed vector aggregate:
 
-         --              V := [1 => "this", 2 => "is", 3 => "a", 4 => "test"];  --@@ MODIF PP: not yet available
+            V := [1 => "this", 2 => "is", 3 => "a", 4 => "test"];
 
          --  Is equivalent to:
 
@@ -666,7 +659,7 @@ procedure AARM_202x_CH04 is
 
          --  A vector of images of dynamic length:
 
-         --              V := [for I in 1 .. N => Integer'Image (I)];  --@@ MODIF PP: not yet available; canceled in draft 24
+            V := [for I in 1 .. N => Integer'Image (I)]; -- canceled in draft 24
 
          --  Is equivalent to:
 
@@ -1042,9 +1035,14 @@ procedure AARM_202x_CH04 is
 
       --      but does not allow
 
-      function If_Then_Else (Flag : Boolean; X, Y : Integer) return Integer is (if Flag then X else Y) with
-         Static; -- see 6.8
-      --      X3 : constant := If_Then_Else (True, 37, 1 / 0);  --@@ MODIF PP: not yet available
+      function If_Then_Else (Flag : Boolean; X, Y : Integer) return Integer is
+                                  (if Flag then X else Y) with Static; -- see 6.8
+      -- X3 : constant := If_Then_Else (True, 37, 1 / 0);  -- Illegal
+      --  error: non-static expression used in number declaration
+      --  error: non-static function call (RM 4.9(6,18))
+      --  error: expression raises exception, cannot be static (RM 4.9(34))
+      --  error: division by zero
+      --  error: static expression fails Constraint_Check
 
       --      because evaluation of a function call includes evaluation of all of its actual parameters.
 
@@ -1052,7 +1050,8 @@ procedure AARM_202x_CH04 is
 
    package Section_4_9_Paragraph_39b is
 
-      X2 : Float := Float'(1.0E+30) + 1.0 - Float'(1.0E+30);   --@@ MODIF22 PP: error: static expression fails Constraint_Check (though it was legal)
+      -- X : Float := Float'(1.0E+400) + 1.0 - Float'(1.0E+400);   --@@ MODIF22 PP: error: static expression fails Constraint_Check (though it was legal)
+      X : Float := Float'(1.0E+30) + 1.0 - Float'(1.0E+30);
 
    end Section_4_9_Paragraph_39b;
 
