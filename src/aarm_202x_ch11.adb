@@ -59,7 +59,7 @@ procedure AARM_202x_CH11 is
          --                  Obj5 : Boolean := (Func_Call or else raise TBD_Error with Atomic); --@@ MODIF03 PP error: "Atomic" is undefined
       Pre : Boolean  := (if not Is_Valid (Param) then raise Not_Valid_Error);
       A   : A_Tagged := (Some_Tagged'(raise TBD_Error) with Comp => 'A');
-      --                  B : Some_Array := (1, 2, 3, others => raise Not_Valid_Error); --@@ MODIF03 PP error: "others" choice not allowed here
+      --                  B : Some_Array := (1, 2, 3, others => raise Not_Valid_Error); --@@ MODIF03b PP error: "others" choice not allowed here
       C : Natural  := Func (Val => raise TBD_Error);
       D : A_Tagged := ((raise TBD_Error) with Comp => 'A');
 

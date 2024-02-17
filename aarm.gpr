@@ -8,9 +8,9 @@ project AARM is
    end Builder;
 
    package Compiler is
-      for Default_Switches ("ada") use ("-gnatVaep", "-gnatw.eH.YD", "-g", "-gnato", "-gnata", "-fstack-check",
+      for Default_Switches ("ada") use ("-gnatVaep", "-gnatw.eH.YD.N", "-g", "-gnato", "-gnata", "-fstack-check",
                                         "-gnatf", "-gnatU", "-gnatW8", "-gnateE", "-gnateF", "-gnateV",
-                                        "-Wall", "-gnatX");
+                                        "-Wall", "-gnat2022");
    end Compiler;
 
    package Binder is

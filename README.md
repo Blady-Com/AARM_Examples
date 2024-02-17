@@ -1,16 +1,16 @@
 # Annotated Ada Reference Manual Examples
 
-The version of the [Annotated Ada Reference Manual](http://www.ada-auth.org/arm.html) (AARM) used here is Ada 202x draft 31 (June 2021).
+The version of the [Annotated Ada Reference Manual](http://www.ada-auth.org/arm.html) (AARM) used here is Ada 2022 final (October 2023).
 
 As an exercise, examples of AARM have been gathered in compilable source files.
-Compiler used: GNAT CE 2021.
+Compiler used: GNAT FSF 13.2.
 
-Pascal Pignard, September 2020, July 2021.
+Pascal Pignard, September 2020, July 2021, February 2024.
 
-### AARM Ada 202x version legal information:
+### AARM Ada 2022 version legal information:
 
-Copyright © 2016, 2017, 2018, 2019, 2020, 2021 AXE Consultants. All Rights
-Reserved.
+Copyright © 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 AXE Consultants.
+All Rights Reserved.
 
 This document may be copied, in whole or in part, in any form or by any means,
 as is, or with alterations, provided that (1) alterations are clearly marked

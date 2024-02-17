@@ -293,7 +293,8 @@ procedure AARM_202x_CH04 is
          -- MODIF PP: warning: Constraint_Error will be raised at run time
        );
 
-         X : Roman_Number := "III" * "IV" * "XII"; -- 144 (that is, CXLIV)
+      --  X : Roman_Number := "III" * "IV" * "XII"; -- 144 (that is, CXLIV) -- MODIF29 : error: there is no applicable operator "*" for a string type
+      X : Roman_Number := 10;
       begin
          Ada.Text_IO.Put_Line ("III * IV * XII is " & X'Image);
       end Section_4_2_1_Paragraph_15;
@@ -382,7 +383,7 @@ procedure AARM_202x_CH04 is
           (for I in 1 .. 4 =>
              (for J in 1 .. 4 =>
                 (if I=J then 1.0 else 0.0))); -- Identity matrix
-   -- Empty_Matrix : constant Matrix := []; -- A matrix without elements --@@ MODIF27 PP: error: value not in range of type "Standard.Integer"
+      Empty_Matrix : constant Matrix := []; -- A matrix without elements --@@ MODIF27 PP: raised CONSTRAINT_ERROR : range check failed
    end Section_4_3_3_Paragraph_44;
 
    -- Example of an array aggregate with defaulted others
@@ -480,10 +481,9 @@ procedure AARM_202x_CH04 is
    private
       type Set_Type is array (1..10) of Boolean;
       function Empty_Set return Set_Type is ([]);
-      type Map_Type is array (1..10) of String (1..10);
+      type Map_Type is new Integer;
       procedure Add_To_Map (M : in out Map_Type; Key : in Integer; Value : in String) is null;
-      -- Empty_Map : constant Map_Type := [1..10 => "          "]; -- MODIF PP: error: choice must be static
-      Empty_Map : constant Map_Type := []; -- MODIF PP: ICE
+      Empty_Map : constant Map_Type := 0;
       type Vector_Type is array (1..10) of Character;
    end Section_4_3_5_Paragraph_54;
 
@@ -603,7 +603,7 @@ procedure AARM_202x_CH04 is
             --  iterated_element_association are of the same type as the key
             --  (eliminating the need for a separate key_expression):
 
-            M := [for Key1 of Keys => Integer'Image (Key1)];
+            --  M := [for Key of Keys => Integer'Image (Key)]; -- MODIF30 PP: ICE on container map for aggregate.
 
             --  Is equivalent to:
 
@@ -614,7 +614,7 @@ procedure AARM_202x_CH04 is
 
             --  The above could have been written using an explicit key_expression:
 
-               M := [for Key2 of Keys use Key2 => Integer'Image (Key2)]; -- MODIF PP: key name conflicts with previous usage, canceled in draft 24
+            M := [for Key of Keys use Key => Integer'Image (Key)]; -- NOTE PP: canceled in draft 24
 
          end;
       end Map_Type_Example;
