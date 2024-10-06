@@ -419,7 +419,7 @@ procedure AARM_202x_CH04 is
 
       --        function Translate (P : Point'Class; X, Y : Real) return Point'Class is
       --          (P with delta X => P.X + X,
-      --           Y => P.Y + Y); -- see 3.9 for declaration of type Point  --@@ MODIF21 PP: error: type "Point'Class" has no component with this name
+      --           Y => P.Y + Y); -- see 3.9 for declaration of type Point  --@@ MODIF21 PP: error: expression function must be enclosed in parentheses
 
       procedure Twelfth (D : in out Date) is null;
       procedure The_Answer (V : in out Vector; A, B : in Integer) is null;
@@ -479,17 +479,32 @@ procedure AARM_202x_CH04 is
       -- Private part not shown.
       -- Needed to compile, sometimes dummy
    private
-      type Set_Type is array (1..10) of Boolean;
+      Type BA is array (1..10) of Boolean;
+      type Set_Type is record
+         Data : BA;
+      end record;
       function Empty_Set return Set_Type is ([]);
       type Map_Type is new Integer;
       procedure Add_To_Map (M : in out Map_Type; Key : in Integer; Value : in String) is null;
       Empty_Map : constant Map_Type := 0;
-      type Vector_Type is array (1..10) of Character;
+      type Vector_Type is record
+         Data : BA;
+      end record;
+   end Section_4_3_5_Paragraph_54;
+
+    package body Section_4_3_5_Paragraph_54 is
+      procedure Include (S : in out Set_Type; N : in Small_Int) is null;
+      function Empty_Vector (Capacity : Integer := 0) return Vector_Type is (Empty_Vector (0));
+      procedure Append_One (V : in out Vector_Type; New_Item : in String) is null;
+      procedure Assign_Element (V : in out Vector_Type; Index : in Positive; Item : in String) is null;
+      function New_Vector (First, Last : Positive) return Vector_Type is (Empty_Vector (0));
    end Section_4_3_5_Paragraph_54;
 
    -- Examples of container aggregates for Set_Type, Map_Type, and Vector_Type:
 
-   package body Section_4_3_5_Paragraph_54 is
+   procedure Section_4_3_5_Paragraph_55 is
+      use Needed_To_Compile;
+      use Section_4_3_5_Paragraph_54;
 
       --  Example aggregates using Set_Type.
 
@@ -669,12 +684,9 @@ procedure AARM_202x_CH04 is
          end loop;
 
       end Vector_Type_Example;
-      procedure Include (S : in out Set_Type; N : in Small_Int) is null;
-      function Empty_Vector (Capacity : Integer := 0) return Vector_Type is (Empty_Vector (0));
-      procedure Append_One (V : in out Vector_Type; New_Item : in String) is null;
-      procedure Assign_Element (V : in out Vector_Type; Index : in Positive; Item : in String) is null;
-      function New_Vector (First, Last : Positive) return Vector_Type is (Empty_Vector (0));
-   end Section_4_3_5_Paragraph_54;
+   begin
+      null;
+   end Section_4_3_5_Paragraph_55;
 
    --  4.4 Expressions
 

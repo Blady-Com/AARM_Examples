@@ -10,7 +10,7 @@ project AARM is
    package Compiler is
       for Default_Switches ("ada") use ("-gnatVaep", "-gnatw.eH.YD.N", "-g", "-gnato", "-gnata", "-fstack-check",
                                         "-gnatf", "-gnatU", "-gnatW8", "-gnateE", "-gnateF", "-gnateV",
-                                        "-Wall", "-gnat2022");
+                                        "-Wall", "-gnat2022", "-gnatwUJK.OMV_A");
    end Compiler;
 
    package Binder is

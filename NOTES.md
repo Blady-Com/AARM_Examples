@@ -15,7 +15,7 @@
 - MODIF01: child package not allowed in procedure
 - <del>MODIF02: sent to ACAA (20191006) -> modified in draft 24</del>
 - MODIF03-CH11: sent to AdaCore (20190929)
-- MODIF03b-CH11: sent to GCC Bug 113862 (20240210)
+- <del>MODIF03b-CH11: sent to GCC Bug 113862 (20240210) -> erroneous support code</del>
 - <del>MODIF04: sent to ACAA (20191010) -> modified in draft 24 </del>
 - <del>MODIF05: sent to ACAA (20191010) -> modified in draft 24 </del>
 - <del>MODIF06: sent to AdaCore (20191011) -> ok with GNAT 13.2.0</del>
