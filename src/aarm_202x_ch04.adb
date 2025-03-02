@@ -156,6 +156,10 @@ procedure AARM_202x_CH04 is
       function Find (B : aliased in out Barrel; Key : String) return Ref_Element;
       -- Returns a reference to an element of a barrel.
 
+      type Bad_Ref (D : access Barrel) is null record
+        with Implicit_Dereference => D;
+      function Create_Ref (B : aliased in out Barrel) return Bad_Ref;
+
       B : aliased Barrel;
 
    private
@@ -169,10 +173,18 @@ procedure AARM_202x_CH04 is
          return R : Ref_Element (B.E'Access);
       end Find;
 
+      function Create_Ref (B : aliased in out Barrel) return Bad_Ref is
+      begin
+         return R : Bad_Ref (B'Access);
+      end;
+
+      X, Y : Bad_Ref := Create_Ref (B);
+
    begin
       Find (B, "grape") := Element'(0); --@ ...); -- Assign through a reference.
       -- This is equivalent to:
       Find (B, "grape").Data.all := Element'(0); --@ ...);
+      -- if X = Y then -- Ambiguous, "=" could be for type Bad_Ref or type Barrel.
    end Section_4_1_5_Paragraph_9;
 
    --  4.1.6 User-Defined Indexing
@@ -257,7 +269,7 @@ procedure AARM_202x_CH04 is
          X : T2 := 123;
       end Pkg2;
 
-      -- the initial value of Pkg2.X is (1,1), not (0,0).  --@@ Note (PP): GNAT error: CE 2021 gives (0,0)
+      -- the initial value of Pkg2.X is (1,1), not (0,0).
 
    begin
       null;
@@ -290,11 +302,12 @@ procedure AARM_202x_CH04 is
          [for I in R'Range =>
            (if I < R'Last and then R(I) < R(I + 1) then -1 else 1) * R(I)]
                           'Reduce("+", 0)
-         -- MODIF PP: warning: Constraint_Error will be raised at run time
+         --@@ MODIF29: warning: value not in range of type "Roman_Number" defined at line 289
+         --@@ MODIF29: warning: Constraint_Error will be raised at run time
        );
 
-      --  X : Roman_Number := "III" * "IV" * "XII"; -- 144 (that is, CXLIV) -- MODIF29 : error: there is no applicable operator "*" for a string type
-      X : Roman_Number := 10;
+      X : Roman_Number := "III" * "IV" * "XII"; -- 144 (that is, CXLIV)
+      Y : Roman_Number := 10;
       begin
          Ada.Text_IO.Put_Line ("III * IV * XII is " & X'Image);
       end Section_4_2_1_Paragraph_15;
@@ -383,7 +396,8 @@ procedure AARM_202x_CH04 is
           (for I in 1 .. 4 =>
              (for J in 1 .. 4 =>
                 (if I=J then 1.0 else 0.0))); -- Identity matrix
-      Empty_Matrix : constant Matrix := []; -- A matrix without elements --@@ MODIF27 PP: raised CONSTRAINT_ERROR : range check failed
+      Empty_Matrix : constant Matrix := []; -- A matrix without elements --@@ MODIF27: warning: Pred of "Integer'First"
+                                                                         --@@ raised CONSTRAINT_ERROR : range check failed
    end Section_4_3_3_Paragraph_44;
 
    -- Example of an array aggregate with defaulted others
@@ -419,7 +433,7 @@ procedure AARM_202x_CH04 is
 
       --        function Translate (P : Point'Class; X, Y : Real) return Point'Class is
       --          (P with delta X => P.X + X,
-      --           Y => P.Y + Y); -- see 3.9 for declaration of type Point  --@@ MODIF21 PP: error: expression function must be enclosed in parentheses
+      --           Y => P.Y + Y); -- see 3.9 for declaration of type Point  --@@ MODIF21: error: expression function must be enclosed in parentheses
 
       procedure Twelfth (D : in out Date) is null;
       procedure The_Answer (V : in out Vector; A, B : in Integer) is null;
@@ -455,7 +469,7 @@ procedure AARM_202x_CH04 is
 
       procedure Add_To_Map (M : in out Map_Type; Key : in Integer; Value : in String);
 
-      Empty_Map : constant Map_Type;
+      function Empty_Map return Map_Type;
 
       -- Vector_Type is an extensible array-like container type.
 
@@ -465,7 +479,7 @@ procedure AARM_202x_CH04 is
                            New_Indexed    => New_Vector,
                            Assign_Indexed => Assign_Element);
 
-      function Empty_Vector (Capacity : Integer := 0) return Vector_Type;
+      function Empty_Vector (Capacity : Natural := 0) return Vector_Type;
 
       procedure Append_One (V : in out Vector_Type; New_Item : in String);
 
@@ -486,7 +500,6 @@ procedure AARM_202x_CH04 is
       function Empty_Set return Set_Type is ([]);
       type Map_Type is new Integer;
       procedure Add_To_Map (M : in out Map_Type; Key : in Integer; Value : in String) is null;
-      Empty_Map : constant Map_Type := 0;
       type Vector_Type is record
          Data : BA;
       end record;
@@ -494,10 +507,11 @@ procedure AARM_202x_CH04 is
 
     package body Section_4_3_5_Paragraph_54 is
       procedure Include (S : in out Set_Type; N : in Small_Int) is null;
-      function Empty_Vector (Capacity : Integer := 0) return Vector_Type is (Empty_Vector (0));
+      function Empty_Vector (Capacity : Natural := 0) return Vector_Type is (Empty_Vector (0));
       procedure Append_One (V : in out Vector_Type; New_Item : in String) is null;
       procedure Assign_Element (V : in out Vector_Type; Index : in Positive; Item : in String) is null;
       function New_Vector (First, Last : Positive) return Vector_Type is (Empty_Vector (0));
+      function Empty_Map return Map_Type is (0);
    end Section_4_3_5_Paragraph_54;
 
    -- Examples of container aggregates for Set_Type, Map_Type, and Vector_Type:
@@ -597,7 +611,7 @@ procedure AARM_202x_CH04 is
             --  A map aggregate using an iterated_element_association
             --  and a key_expression, built from from a table of key/value pairs:
 
-            --  M := [for P of Table use P.Key => P.Value.all]; --@@ MODIF28 PP: error: invalid prefix in selected component "Value"
+            --  M := [for P of Table use P.Key => P.Value.all]; --@@ MODIF28: error: invalid prefix in selected component "Value"
 
             --  Is equivalent to:
 
@@ -618,7 +632,7 @@ procedure AARM_202x_CH04 is
             --  iterated_element_association are of the same type as the key
             --  (eliminating the need for a separate key_expression):
 
-            --  M := [for Key of Keys => Integer'Image (Key)]; -- MODIF30 PP: ICE on container map for aggregate.
+            --  M := [for Key of Keys => Integer'Image (Key)]; -- MODIF30: ICE on container map for aggregate.
 
             --  Is equivalent to:
 
@@ -905,10 +919,10 @@ procedure AARM_202x_CH04 is
                  [for I in 1 .. Number_Of_Steps =>
                    (4.0 / (1.0 + ((Real (I) - 0.5) * (1.0 / Real (Number_Of_Steps)))**2))]
                      'Reduce("+", 0.0));
-
+                   --  Reduce(Reducer => "+", Initial_Value => 0.0)) -- New syntax of Ada 202y
       -- Example of a reduction expression used to calculate the sum of elements of an array of integers:
 
-      --    A'Reduce("+",0)  -- See 4.3.3.
+      --    A'Reduce("+", Initial_Value => 0)  -- See 4.3.3.
 
       -- Example of a reduction expression used to etermine if all elements in a two dimensional array of booleans are set to true:
 
@@ -916,7 +930,8 @@ procedure AARM_202x_CH04 is
 
       -- Example of a reduction expression used to calculate the minimum value of an array of integers in parallel:
 
-      --    A'Parallel_Reduce(Integer'Min, Integer'Last)
+      --    A'Parallel_Reduce(Reducer => Integer'Min,
+                   --  Initial_Value => Integer'Last)
 
       -- Example of a parallel reduction expression used to calculate the mean
       -- of the elements of a two-dimensional array of subtype Matrix (see 3.6) that
@@ -1062,7 +1077,7 @@ procedure AARM_202x_CH04 is
 
    package Section_4_9_Paragraph_39b is
 
-      -- X : Float := Float'(1.0E+400) + 1.0 - Float'(1.0E+400);   --@@ MODIF22 PP: error: static expression fails Constraint_Check (though it was legal)
+      -- X : Float := Float'(1.0E+400) + 1.0 - Float'(1.0E+400);   --@@ MODIF22: error: static expression fails Constraint_Check (though it was legal)
       X : Float := Float'(1.0E+30) + 1.0 - Float'(1.0E+30);
 
    end Section_4_9_Paragraph_39b;

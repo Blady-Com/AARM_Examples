@@ -1049,15 +1049,15 @@ procedure AARM_202x_CH03 is
       use Section_3_8_Paragraph_27;
       package body Pack is -- Could be separately compiled!
          type Sep is access Date;
-         I : Integer := X.all'Size; -- Legal, by AI-00039.
+         --  X := new Sep; -- NOTE PP: error: statement not allowed in declarative part
       begin
          X := new Sep;
       end Pack;
 
       --              pragma Elaborate(Pack);
-      --                   package Pack.Child is
-      --                      I : Integer := X.all'Size; -- Legal, by AI-00039.
-      --                  end Pack.Child;
+      --              private package Pack.Child is
+      --                  I : Integer := X.all'Size; -- Legal, by AI-00039.
+      --              end Pack.Child;
    end Section_3_10_1_Paragraph_23d;
 
    --  3.10.2 Operations of Access Types

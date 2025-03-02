@@ -21,15 +21,13 @@ procedure AARM_202x_CHAB is
 
    package Fortran_Library is
       function Sqrt (X : Float) return Float with
-         Import     => True,
-         Convention => Fortran;
+        Import => True, Convention => Fortran;
       type Matrix is array (Natural range <>, Natural range <>) of Float with
-         Convention => Fortran;
+        Convention => Fortran;
       function Invert
         (M : Matrix)
          return Matrix with --@@ Note (PP): foreign convention function "Invert" should not return unconstrained array
-         Import     => True,
-         Convention => Fortran;
+        Import => True, Convention => Fortran;
    end Fortran_Library;
 
    --  B.2 The Package Interfaces
@@ -50,9 +48,7 @@ procedure AARM_202x_CHAB is
 
       -- Note: since the C function's return value is of no interest, the Ada interface is a procedure
       procedure Strcpy (Target : out C.char_array; Source : in C.char_array) with
-         Import        => True,
-         Convention    => C,
-         External_Name => "strcpy";
+        Import => True, Convention => C, External_Name => "strcpy";
 
       -- Call <sdtio.h>printf:
       -- C definition of printf:  int printf ( const char * format, ... );
@@ -67,9 +63,7 @@ procedure AARM_202x_CHAB is
 
       -- Note: since the C function's return value is of no interest, the Ada interface is a procedure
       procedure Printf (Format : in C.char_array; Param1 : in C.char_array; Param2 : in C.int) with
-         Import        => True,
-         Convention    => C_Variadic_1,
-         External_Name => "printf";
+        Import => True, Convention => C_Variadic_1, External_Name => "printf";
 
       Chars1 : C.char_array (1 .. 20);
       Chars2 : C.char_array (1 .. 20);
@@ -87,6 +81,18 @@ procedure AARM_202x_CHAB is
    --     B.3.1 The Package Interfaces.C.Strings
 
    --     B.3.2 The Generic Package Interfaces.C.Pointers
+
+   --  Usage
+
+   type Element_Array is array (Natural range <>) of aliased Integer;
+   package Int_Ptrs is new Interfaces.C.Pointers
+     (Index => Natural, Element => Integer, Element_Array => Element_Array, Default_Terminator => 0);
+
+   --  To compose a Pointer from an Element_Array, use 'Access on
+   --  the first element. For example (assuming appropriate instantiations):
+
+   Some_Array   : Element_Array (0 .. 5);
+   Some_Pointer : Int_Ptrs.Pointer := Some_Array (0)'Access;
 
    --     45  Example of Interfaces.C.Pointers:
 
@@ -131,7 +137,7 @@ procedure AARM_202x_CHAB is
                F2 : Integer := 0;
          end case;
       end record with
-         Unchecked_Union;
+        Unchecked_Union;
 
       X : T;
       Y : Integer := X.F2; -- erroneous
@@ -162,11 +168,10 @@ procedure AARM_202x_CHAB is
          SSN    : COBOL.Numeric (1 .. 9);
          Salary : COBOL.Binary;  -- Assume Binary = 32 bits
       end record with
-         Convention => COBOL;
+        Convention => COBOL;
 
       procedure Prog (Item : in out COBOL_Record) with
-         Import     => True,
-         Convention => COBOL;
+        Import => True, Convention => COBOL;
 
       package Salary_Conversions is new COBOL.Decimal_Conversions (Salary_Type);
 
@@ -205,7 +210,7 @@ procedure AARM_202x_CHAB is
          Salary : COBOL.Byte_Array (1 .. 4);
          Adjust : COBOL.Numeric (1 .. 7);  -- Sign and 6 digits
       end record with
-         Convention => COBOL;
+        Convention => COBOL;
 
       package COBOL_Employee_IO is new COBOL_Sequential_IO (COBOL_Employee_Record_Type);
       use COBOL_Employee_IO;
@@ -254,18 +259,17 @@ procedure AARM_202x_CHAB is
    procedure Ada_Application is
 
       type Fortran_Matrix is array (Fortran_Integer range <>, Fortran_Integer range <>) of Double_Precision with
-         Convention => Fortran;                  -- stored in Fortran's
+        Convention => Fortran;                  -- stored in Fortran's
          -- column-major order
       procedure Invert (Rank : in Fortran_Integer; X : in out Fortran_Matrix) with
-         Import     => True,
-         Convention => Fortran; -- a Fortran subroutine
+        Import => True, Convention => Fortran; -- a Fortran subroutine
 
       Rank      : constant Fortran_Integer := 100;
       My_Matrix : Fortran_Matrix (1 .. Rank, 1 .. Rank);
 
       Precision : constant := 6;
       type Standard_Deviation is digits Precision with
-         Convention => Fortran;
+        Convention => Fortran;
       Deviation : Standard_Deviation;
       -- Declarations to match the following Fortran declarations:
       --   integer, parameter :: precision = selected_real_kind(p=6)
@@ -274,7 +278,8 @@ procedure AARM_202x_CHAB is
    begin
 
          --@ ...
-      My_Matrix := ((1.0, 1.0 / 2.0), (1.0 / 2.0, 1.0 / 3.0), others => (0.0, 0.0));  --@ ...;
+      My_Matrix :=
+        ((1.0, 1.0 / 2.0, others => 0.0), (1.0 / 2.0, 1.0 / 3.0, others => 0.0), others => (others => 0.0));  --@ ...;
            --@ ...
       Invert (Rank, My_Matrix);
            --@ ...

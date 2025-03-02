@@ -12,16 +12,16 @@
 
 ## Reports
 
-- MODIF01: child package not allowed in procedure
+- MODIF01-CH03: child package not allowed in procedure
 - <del>MODIF02: sent to ACAA (20191006) -> modified in draft 24</del>
 - MODIF03-CH11: sent to AdaCore (20190929)
 - <del>MODIF03b-CH11: sent to GCC Bug 113862 (20240210) -> erroneous support code</del>
 - <del>MODIF04: sent to ACAA (20191010) -> modified in draft 24 </del>
 - <del>MODIF05: sent to ACAA (20191010) -> modified in draft 24 </del>
 - <del>MODIF06: sent to AdaCore (20191011) -> ok with GNAT 13.2.0</del>
-- MODIF07: component overlaps tag field of tagged type
+- MODIF07-CH05: component overlaps tag field of tagged type
 - <del>MODIF08: sent to AdaCore (20191013) -> ok with GNAT 13.2.0</del>
-- MODIF09: not defined by GNAT
+- MODIF09-CH13: not defined by GNAT
 - <del>MODIF10: representation item appears too late -> ok </del>
 - <del>MODIF11: type must be fully defined before this point -> ok </del>
 - MODIF12-CH13: sent to AdaCore (20191013)
@@ -42,8 +42,10 @@
 - <del>MODIF26-CH05: sent to AdaCore (20210714) -> ok with GNAT 12.1.0 </del>
 - Note-CHAA: use clause for package "Node_Maps" has no effect, sent to ACAA (20210714)
 - Note-CHAB: foreign convention function "Invert" should not return unconstrained array, sent to ACAA (20210714)
-- Note-CH04: GNAT error: CE 2021 gives (0,0), sent to AdaCore (20210714)
+- <del>Note-CH04: GNAT error: CE 2021 gives (0,0), sent to AdaCore (20210714) -> ok with GNAT 14.2.0 </del>
 - MODIF27-CH04: sent to GCC Bug 106168 (20220701)
 - MODIF28-CH04: sent to GCC Bug 106169 (20220701)
-- MODIF29-CH04: sent to GCC Bug 113815 (20240208)
+- MODIF29-CH04: sent to GCC Bug 113815 (20240208) -> no more error but warning still remains with version 14.2
 - MODIF30-CH04: sent to GCC Bug 113972 (20240217)
+- Note-Ch13: warning: cannot pack aliased components (RM 13.2(7)), envoyé CLA 20250302
+- NOTE-CH03: error: statement not allowed in declarative part, envoyer Ada Comment 20250302

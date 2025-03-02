@@ -83,10 +83,10 @@ procedure AARM_202x_CH13 is
       procedure Q is
          use P1, P2;
          type Array1 is array (Integer range <>) of aliased S1
-           with Pack;
+           with Pack; -- NOTE PP: warning: cannot pack aliased components (RM 13.2(7))
          Obj1 : Array1 (1 .. 100);
          type Array2 is array (Integer range <>) of aliased S2
-           with Pack;
+           with Pack; -- NOTE PP: warning: cannot pack aliased components (RM 13.2(7))
          Obj2 : Array2 (1 .. 100);
       begin
          X1 := Obj2 (17)'Unchecked_Access;
