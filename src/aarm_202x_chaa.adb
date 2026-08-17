@@ -184,7 +184,7 @@ procedure AARM_202x_CHAA is
          package Paths is new Doubly_Linked_Lists (Node);
 
          function Shortest_Path (G : Graphs.Vector; Source : Node; Target : Node) return Paths.List with
-            Pre => G (Source) /= Adjacency_Lists.Empty_List;
+           Pre => G (Source) /= Adjacency_Lists.Empty_List;
 
       end Shortest_Paths;
 

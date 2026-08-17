@@ -87,11 +87,10 @@ procedure AARM_202x_CH03 is
       subtype Basic_Letter is
         Character -- See A.3.2 for "basic letter".
       with
-           Static_Predicate => Basic_Letter in 'A' .. 'Z' | 'a' .. 'z' | 'Æ' | 'æ' | 'Ð' | 'ð' | 'Þ' | 'þ' | 'ß';
+          Static_Predicate => Basic_Letter in 'A' .. 'Z' | 'a' .. 'z' | 'Æ' | 'æ' | 'Ð' | 'ð' | 'Þ' | 'þ' | 'ß';
 
       subtype Even_Integer is Integer with
-           Dynamic_Predicate => Even_Integer mod 2 = 0,
-           Predicate_Failure => "Even_Integer must be a multiple of 2";
+          Dynamic_Predicate => Even_Integer mod 2 = 0, Predicate_Failure => "Even_Integer must be a multiple of 2";
    end Section_3_2_4_Paragraph_39;
 
    --  3.3 Objects and Named Numbers
@@ -415,9 +414,7 @@ procedure AARM_202x_CH03 is
 
    package Section_3_7_Paragraph_33 is
       use Section_3_5_4_Paragraph_34, Section_3_6_Paragraph_25;
-      type Buffer
-        (Size : Buffer_Size := 100)
-      is        -- see 3.5.4
+      type Buffer (Size : Buffer_Size := 100) is        -- see 3.5.4
       record
          Pos   : Buffer_Size := 0;
          Value : String (1 .. Size);

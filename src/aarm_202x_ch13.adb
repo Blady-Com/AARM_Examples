@@ -37,7 +37,7 @@ procedure AARM_202x_CH13 is
 
       subtype S is Integer range 1 .. 256;
       type A is array (Natural range 1 .. 4) of S with
-         Pack;
+        Pack;
       X : S := 3;
       Y : A := (1, 2, 3, 4);
 
@@ -82,11 +82,11 @@ procedure AARM_202x_CH13 is
 
       procedure Q is
          use P1, P2;
-         type Array1 is array (Integer range <>) of aliased S1
-           with Pack; -- NOTE PP: warning: cannot pack aliased components (RM 13.2(7))
+         type Array1 is array (Integer range <>) of aliased S1 with
+           Pack; -- NOTE PP: warning: cannot pack aliased components (RM 13.2(7))
          Obj1 : Array1 (1 .. 100);
-         type Array2 is array (Integer range <>) of aliased S2
-           with Pack; -- NOTE PP: warning: cannot pack aliased components (RM 13.2(7))
+         type Array2 is array (Integer range <>) of aliased S2 with
+           Pack; -- NOTE PP: warning: cannot pack aliased components (RM 13.2(7))
          Obj2 : Array2 (1 .. 100);
       begin
          X1 := Obj2 (17)'Unchecked_Access;
@@ -177,11 +177,11 @@ procedure AARM_202x_CH13 is
       type Mode is (Fix, Dec, Exp, Signif);
 
       type Byte_Mask is array (0 .. 7) of Boolean with
-         Component_Size => 1;
+        Component_Size => 1;
       type State_Mask is array (State) of Boolean with
-         Component_Size => 1;
+        Component_Size => 1;
       type Mode_Mask is array (Mode) of Boolean with
-         Component_Size => 1;
+        Component_Size => 1;
 
       type Program_Status_Word is record
          System_Mask     : Byte_Mask;
@@ -256,7 +256,7 @@ procedure AARM_202x_CH13 is
 
    M : Mask;
    procedure Set_Mask with
-      Inline;
+     Inline;
 
    procedure Set_Mask is
       use System.Machine_Code; -- assume "with System.Machine_Code;" appears somewhere above
@@ -353,8 +353,8 @@ procedure AARM_202x_CH13 is
       subtype Subpool_Indexes is Positive range 1 .. 10;
       type Subpool_Array is array (Subpool_Indexes) of aliased MR_Subpool;
 
-      type Mark_Release_Pool_Type (Pool_Size : Storage_Count) is new Subpools.Root_Storage_Pool_With_Subpools with
-      record
+      type Mark_Release_Pool_Type (Pool_Size : Storage_Count) is
+      new Subpools.Root_Storage_Pool_With_Subpools with record
          Storage         : Storage_Array (0 .. Pool_Size);
          Next_Allocation : Storage_Count   := 0;
          Markers         : Subpool_Array;
@@ -484,10 +484,10 @@ procedure AARM_202x_CH13 is
          type Network_Stream is new Root_Stream_Type with null record; --@ ...
          procedure Read
            ( -- @ ...);  -- define Read/Write for Network_Stream
-         Stream : in out Network_Stream; Item : out Stream_Element_Array; Last : out Stream_Element_Offset) is null;
+            Stream : in out Network_Stream; Item : out Stream_Element_Array; Last : out Stream_Element_Offset) is null;
          procedure Write
            ( -- @ ...);
-         Stream : in out Network_Stream; Item : in Stream_Element_Array) is null;
+            Stream : in out Network_Stream; Item : in Stream_Element_Array) is null;
       end Network_IO;
 
    end Section_13_13_2_Paragraph_59;

@@ -393,7 +393,7 @@ procedure AARM_202x_CH06 is
       type Rec is record
          Count, Max : Natural;
       end record with
-         Dynamic_Predicate => Rec.Count <= Rec.Max;
+        Dynamic_Predicate => Rec.Count <= Rec.Max;
 
       function Foo return Rec is
       begin
@@ -426,7 +426,7 @@ procedure AARM_202x_CH06 is
    procedure Fail
      (Msg : String)  -- raises Fatal_Error exception
    with
-      No_Return;
+     No_Return;
 
    procedure Fail (Msg : String) is
       Fatal_Error : exception;

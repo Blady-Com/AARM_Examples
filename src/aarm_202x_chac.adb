@@ -45,7 +45,7 @@ procedure AARM_202x_CHAC is
       --  17 Example of a spin lock using Atomic_Exchange:
 
       type Atomic_Boolean is new Boolean with
-         Atomic;
+        Atomic;
 --        package Exchange is new Atomic_Operations.Exchange (Atomic_Type => Atomic_Boolean);   --@@ MODIF PP: not yet available
 
       Lock : aliased Atomic_Boolean := False;

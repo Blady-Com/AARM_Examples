@@ -233,7 +233,8 @@ procedure AARM_202x_CH12 is
          T1_Obj : T1; --@ := ...; --@@ Note (PP): initial value may come from extra generic formal of type T1
          Bool_1 : Boolean := T1_Obj = T1_Obj;
 
-         T2_Obj : T2; --@ := ...; --@@ Note (PP): initial value may come from T2 conversion of extra generic formal of type T1
+         T2_Obj :
+           T2; --@ := ...; --@@ Note (PP): initial value may come from T2 conversion of extra generic formal of type T1
          Bool_2 : Boolean := T2_Obj = T2_Obj;
       end G2;
              --@   ...

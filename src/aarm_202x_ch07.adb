@@ -392,17 +392,17 @@ procedure AARM_202x_CH07 is
       -- See 3.5.1 for type declarations of Level, Day, and Weekday
 
       type Work_Order is private with
-         Type_Invariant => Day_Scheduled (Work_Order) in Weekday or else Priority (Work_Order) = Urgent;
+        Type_Invariant => Day_Scheduled (Work_Order) in Weekday or else Priority (Work_Order) = Urgent;
 
       function Schedule_Work (Urgency : in Level; To_Occur : in Day) return Work_Order with
-         Pre => Urgency = Urgent or else To_Occur in Weekday;
+        Pre => Urgency = Urgent or else To_Occur in Weekday;
 
       function Day_Scheduled (Order : in Work_Order) return Day;
 
       function Priority (Order : in Work_Order) return Level;
 
       procedure Change_Priority (Order : in out Work_Order; New_Priority : in Level; Changed : out Boolean) with
-         Post => Changed = (Day_Scheduled (Order) in Weekday or else Priority (Order) = Urgent);
+        Post => Changed = (Day_Scheduled (Order) in Weekday or else Priority (Order) = Urgent);
 
    private
 
@@ -448,9 +448,7 @@ procedure AARM_202x_CH07 is
 
       Null_Key       : constant Key;      -- see 7.3.1
       CPU_Identifier : constant String (1 .. 8) with
-         Import     => True,
-         Convention => Assembler,
-         Link_Name  => "CPU_ID"; -- see B.1
+        Import => True, Convention => Assembler, Link_Name => "CPU_ID"; -- see B.1
 
    private
       Null_Key : constant Key := 99;
