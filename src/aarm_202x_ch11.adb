@@ -52,21 +52,21 @@ procedure AARM_202x_CH11 is
       type Some_Array is array (Positive range 1 .. 10) of NTCT;
       function Func (Val : Integer) return Natural is (0);
 
-      --           Obj1 : Boolean := Func_Call or else raise TBD_Error with Atomic; -- illegal
-      Obj2 : Boolean    := Func_Call or else (raise TBD_Error) with
+      --  Obj1 : Boolean := Func_Call or else raise TBD_Error with Atomic; -- illegal error: raise_expression must be parenthesized in this context
+      Obj2 : Boolean := Func_Call or else (raise TBD_Error) with
         Atomic;
-      Obj3 : Boolean    := (Func_Call or else raise TBD_Error) with
+      Obj3 : Boolean := (Func_Call or else raise TBD_Error) with
         Atomic;
-      --          Obj4 : Boolean := Func_Call or else (raise TBD_Error with Atomic); --@@ MODIF03 PP error: "Atomic" is undefined
-      --                  Obj5 : Boolean := (Func_Call or else raise TBD_Error with Atomic); --@@ MODIF03 PP error: "Atomic" is undefined
-      Pre  : Boolean    :=
+      --  Obj4 : Boolean := Func_Call or else (raise TBD_Error with Atomic); --@@ MODIF03 PP error: "Atomic" is undefined
+      --  Obj5 : Boolean := (Func_Call or else raise TBD_Error with Atomic); --@@ MODIF03 PP error: "Atomic" is undefined
+      Pre : Boolean :=
         (if not Is_Valid (Param) then raise Not_Valid_Error); -- raises Not_Valid_Error if Is_Valid returns False
-      A    : A_Tagged   :=
+      A : A_Tagged :=
         (Some_Tagged'(raise TBD_Error) with Comp => 'A'); -- raises TBD_Error if Some_Tagged is not null record
-      B    : Some_Array := (1, 2, 3, others => raise Not_Valid_Error);
-      B1   : Some_Array := (1, 2, 3); -- raises Constraint_Error
-      C    : Natural    := Func (Val => raise TBD_Error); -- always raises TBD_Error
-      D    : A_Tagged   := ((raise TBD_Error) with Comp => 'A'); -- raises TBD_Error if Some_Tagged is not null record
+      B  : Some_Array := (1, 2, 3, others => raise Not_Valid_Error);
+      B1 : Some_Array := (1, 2, 3); -- raises Constraint_Error
+      C  : Natural    := Func (Val => raise TBD_Error); -- always raises TBD_Error
+      D  : A_Tagged   := ((raise TBD_Error) with Comp => 'A'); -- raises TBD_Error if Some_Tagged is not null record
 
    end Section_11_3_Paragraph_2a;
 

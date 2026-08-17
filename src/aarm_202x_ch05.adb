@@ -441,11 +441,9 @@ procedure AARM_202x_CH05 is
                end;
             end loop;
 
-            --  Put_Line ("Total=" & Partial_Sum'Reduce ("+", 0)'Image &
-            --              ", Min=" & Partial_Min'Reduce(Natural'Min, Natural'Last)'Image &
-            --              ", Max=" & Partial_Max'Reduce(Natural'Max, 0)'Image);
-            --@@ MODDIF PP: GNAT error: expected type universal integer
-            --@@ MODIF PP: GNAT error: found type "Standard.Integer"
+            Put_Line ("Total=" & Partial_Sum'Reduce ("+", 0)'Image &
+                        ", Min=" & Partial_Min'Reduce (Natural'Min, Natural'Last)'Image &
+                        ", Max=" & Partial_Max'Reduce (Natural'Max, 0)'Image);
 
          end;
 

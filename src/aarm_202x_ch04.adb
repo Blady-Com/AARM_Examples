@@ -5,7 +5,7 @@ procedure AARM_202x_CH04 is
    package Needed_To_Compile is
       -- Needed to compile, sometimes dummy
       type Real is digits 8;
-      type Matrix is array (Integer range <>, Integer range <>) of Real;
+      type Matrix is array (Positive range <>, Positive range <>) of Real;
       type Bit_Vector is array (Integer range <>) of Boolean;
       type Table is array (1 .. 10) of Integer;
       M  : constant := 99;
@@ -276,38 +276,39 @@ procedure AARM_202x_CH04 is
    end Section_4_2_1_Paragraph_6b;
 
    procedure Section_4_2_1_Paragraph_15 is
-      type Roman_Digit is ('I', 'V', 'X', 'L', 'C', 'D', 'M');
-      for Roman_Digit use ('I' => 1, 'V' => 5, 'X' => 10, 'L' => 50, 'C' => 100, 'D' => 500, 'M' => 1000);
+      package Roman is
+         type Roman_Digit is ('I', 'V', 'X', 'L', 'C', 'D', 'M');
+         for Roman_Digit use ('I' => 1, 'V' => 5, 'X' => 10, 'L' => 50, 'C' => 100, 'D' => 500, 'M' => 1000);
 
-      --                                    Examples
+         --                                    Examples
 
-      subtype Roman_Character is Wide_Wide_Character with
-        Static_Predicate => Roman_Character in 'I' | 'V' | 'X' | 'L' | 'C' | 'D' | 'M';
+         subtype Roman_Character is Wide_Wide_Character with
+           Static_Predicate => Roman_Character in 'I' | 'V' | 'X' | 'L' | 'C' | 'D' | 'M';
 
-      Max_Roman_Number : constant := 3_999;  -- MMMCMXCIX
+         Max_Roman_Number : constant := 3_999;  -- MMMCMXCIX
 
-      type Roman_Number is range 1 .. Max_Roman_Number
-        with String_Literal => To_Roman_Number;
+         type Roman_Number is range 1 .. Max_Roman_Number
+           with String_Literal => To_Roman_Number;
 
-      function To_Roman_Number (S : Wide_Wide_String) return Roman_Number
-        with Pre => S'Length > 0 and then
-        (for all Char of S => Char in Roman_Character);
+         function To_Roman_Number (S : Wide_Wide_String) return Roman_Number
+           with Pre => S'Length > 0 and then
+           (for all Char of S => Char in Roman_Character);
 
-      function To_Roman_Number (S : Wide_Wide_String) return Roman_Number is
-        (declare
-         R : constant array (Integer range <>) of Roman_Number :=
-         (for D in S'Range => Roman_Digit'Enum_Rep
-          (Roman_Digit'Wide_Wide_Value (''' & S(D) & '''))); -- See 3.5.2 and 13.4
-         begin
-         [for I in R'Range =>
-           (if I < R'Last and then R(I) < R(I + 1) then -1 else 1) * R(I)]
+         function To_Roman_Number (S : Wide_Wide_String) return Roman_Number is
+           (declare
+            R : constant array (Integer range <>) of Roman_Number :=
+            (for D in S'Range => Roman_Digit'Enum_Rep
+             (Roman_Digit'Wide_Wide_Value (''' & S (D) & '''))); -- See 3.5.2 and 13.4
+            begin
+              [for I in R'Range =>
+                   (if I < R'Last and then R (I) < R (I + 1) then -1 else 1) * R (I)]
                           'Reduce("+", 0)
-         --@@ MODIF29: warning: value not in range of type "Roman_Number" defined at line 289
-         --@@ MODIF29: warning: Constraint_Error will be raised at run time
-       );
+           );
+      end Roman;
 
-      X : Roman_Number := "III" * "IV" * "XII"; -- 144 (that is, CXLIV)
-      Y : Roman_Number := 10;
+      use type Roman.Roman_Number;
+      X : Roman.Roman_Number := "III" * "IV" * "XII"; -- 144 (that is, CXLIV)
+      Y : Roman.Roman_Number := 10;
       begin
          Ada.Text_IO.Put_Line ("III * IV * XII is " & X'Image);
       end Section_4_2_1_Paragraph_15;
@@ -396,8 +397,7 @@ procedure AARM_202x_CH04 is
           (for I in 1 .. 4 =>
              (for J in 1 .. 4 =>
                 (if I=J then 1.0 else 0.0))); -- Identity matrix
-      Empty_Matrix : constant Matrix := []; -- A matrix without elements --@@ MODIF27: warning: Pred of "Integer'First"
-                                                                         --@@ raised CONSTRAINT_ERROR : range check failed
+      Empty_Matrix : constant Matrix := []; -- A matrix without elements
    end Section_4_3_3_Paragraph_44;
 
    -- Example of an array aggregate with defaulted others
@@ -431,9 +431,9 @@ procedure AARM_202x_CH04 is
 
       -- The base expression may also be class-wide:
 
-      --        function Translate (P : Point'Class; X, Y : Real) return Point'Class is
-      --          (P with delta X => P.X + X,
-      --           Y => P.Y + Y); -- see 3.9 for declaration of type Point  --@@ MODIF21: error: expression function must be enclosed in parentheses
+      function Translate (P : Point'Class; X, Y : Real) return Point'Class is
+        (P with delta X => P.X + X,
+         Y              => P.Y + Y); -- see 3.9 for declaration of type Point
 
       procedure Twelfth (D : in out Date) is null;
       procedure The_Answer (V : in out Vector; A, B : in Integer) is null;
@@ -611,7 +611,7 @@ procedure AARM_202x_CH04 is
             --  A map aggregate using an iterated_element_association
             --  and a key_expression, built from from a table of key/value pairs:
 
-            --  M := [for P of Table use P.Key => P.Value.all]; --@@ MODIF28: error: invalid prefix in selected component "Value"
+            M := [for P of Table use P.Key => P.Value.all];
 
             --  Is equivalent to:
 
@@ -632,7 +632,7 @@ procedure AARM_202x_CH04 is
             --  iterated_element_association are of the same type as the key
             --  (eliminating the need for a separate key_expression):
 
-            --  M := [for Key of Keys => Integer'Image (Key)]; -- MODIF30: ICE on container map for aggregate.
+            M := [for Key of Keys => Integer'Image (Key)];
 
             --  Is equivalent to:
 
