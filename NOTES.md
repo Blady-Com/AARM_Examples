@@ -30,7 +30,7 @@
 - <del>MODIF15: sent to ACAA (20191124) -> modified in draft 24 </del>
 - <del>MODIF16: error: "Device_Done" not declared in "Names", Ada.Interrupts.Names is implementation defined -> ok </del>
 - <del>MODIF17-CH12: sent to ACAA (20200613) -> ok with GNAT CE 2021 </del>
-- MODIF18-CHAJ: sent to ACAA (20200613)
+- <del>MODIF18-CHAJ: sent to ACAA (20200613) -> implementation defined and obsolescent </del>
 - MODIF PP: general comment for a feature not yet available with GNAT
 - <del>MODIF19-CH05: sent to AdaCore (20200613) -> ok with GNAT CE 2021 </del>
 - <del>MODIF20-CH04: sent to ACAA (20200525, 20200613) -> modified in draft 25 and 26 </del>

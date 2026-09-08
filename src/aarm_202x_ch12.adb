@@ -527,7 +527,7 @@ procedure AARM_202x_CH12 is
          package New_P2 is new P (NT, Foo => Bar);
       end Gr;
 
-      package New_Gr is new Gr (Something);
+      package New_Gr is new Gr (Something'Class);
 
    end Section_12_6_Paragraph_8g;
 
